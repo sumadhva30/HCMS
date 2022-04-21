@@ -1,3 +1,4 @@
+from email.iterators import body_line_iterator
 from typing import Optional
 from fastapi import FastAPI
 from pymongo import MongoClient
@@ -20,3 +21,18 @@ async def read_root():
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Optional[str] = None):
     return {"item_id": item_id, "q": q}
+
+is_admin
+is_responder
+is_student
+get_email()
+
+@app.get("/incidents/search")
+def input_search_incidents():
+    ...
+    if(not is_admin()) {
+        return some error
+    }
+    query = read request body
+    ret = search_incidents(query)
+    return processed ret
