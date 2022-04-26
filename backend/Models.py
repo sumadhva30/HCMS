@@ -1,6 +1,4 @@
 from datetime import datetime
-from socket import SOL_NETROM
-from token import OP
 from typing import List, Optional
 from unicodedata import category
 from bson import ObjectId
@@ -13,6 +11,9 @@ class TicketInfo(BaseModel):
     cat: str   #Problem_category
     desc: str  #Problem_desc
 
+
+class StudentInfo(BaseModel):
+    pass
 
 #Notes, posted by admin/responder
 class IncidentNotes(BaseModel):
@@ -35,17 +36,17 @@ class IncidentFeedback(BaseModel):
 
 
 class IncidentInfo(BaseModel, allow_population_by_field_name=True):
-    id: Optional[ObjectId] = Field(..., alias='_id')
+    id: Optional[PyObjectId] = Field(..., alias='_id')
     sub: Optional[str] = None #Subject
     cat: Optional[str] = None #incident categoty
     assigned: Optional[bool] = None
-    resolved: Optional[bool] = None
+    resolved: Optional[bool] = None #student
     severity: Optional[int] = None
     resp_id: Optional[str] = None
     std_id: Optional[str] = None
     notes: Optional[List[IncidentNotes]] = None
-    msgs: Optional[List[IncidentMsgs]] = None
-    feedback: Optional[IncidentFeedback] = None
+    msgs: Optional[List[IncidentMsgs]] = None #student
+    feedback: Optional[IncidentFeedback] = None #student
 
 class WeeklySlot(BaseModel):
     Fn_id: Optional[str] = None #Responder id for forenoon/afternoon slots
@@ -55,8 +56,8 @@ class SpecificSlot(BaseModel):
     Date: datetime  
     Time: str   #"An"/"Fn"
 
-class OnCallWeekly(BaseModel):
-    id: Optional[ObjectId] = Field(..., alias='_id')
+class OnCallWeekly(BaseModel, allow_population_by_field_name=True):
+    id: Optional[PyObjectId] = Field(..., alias='_id')
     cat: Optional[str] = None
     monday: Optional[WeeklySlot] = None
     tuesday: Optional[WeeklySlot] = None
@@ -66,8 +67,8 @@ class OnCallWeekly(BaseModel):
     saturday: Optional[WeeklySlot] = None
     sunday: Optional[WeeklySlot] = None
 
-class OnCallSpecific(BaseModel):
-    id: Optional[ObjectId] = Field(..., alias='_id')
+class OnCallSpecific(BaseModel, allow_population_by_field_name=True):
+    id: Optional[PyObjectId] = Field(..., alias='_id')
     slot: Optional[SpecificSlot] = None
     cat: Optional[str] = None
     resp_id: Optional[str] = None

@@ -1,10 +1,8 @@
 from bson import ObjectId
 from typing import List, Optional
-import Models
 
 from pymongo import MongoClient
 
-from backend.Models import IncidentInfo, OnCallSpecific, OnCallWeekly, ResponderModel, ResponderSummaryModel
 client = MongoClient()
 
 database = client['HCMS_db']
