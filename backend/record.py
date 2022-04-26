@@ -70,5 +70,7 @@ def record_weekly_on_call_schedule(schedule: OnCallWeekly):
     database["weekly_schedule"].update_one({"cat": schedule.cat}, update, upsert=True)
 
 def record_specific_on_call_schedule(schedule: OnCallSpecific):
-    
+    if schedule.cat is None:
+        return
+    database["specific_schedule"].update_one({"slot": schedule["slot"], "cat": schedule["cat"]}, {"resp_id": schedule["resp_id"]}, upsert=True)
     pass
