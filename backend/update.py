@@ -43,14 +43,14 @@ def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
 def check_specific_oncall_schedule(incident: IncidentInfo):
 
     if datetime.now().hour <= 15:
-        time = "Fn"
+        slot = "Fn"
     else:
-        time = "An"
+        slot = "An"
     # specific_slot = SpecificSlot({'Date' : date.today(), 'Time': time})
-    specific_slot = SpecificSlot(Date = date.today(),Time = time)
+    specific_slot = SpecificSlot(Date = date.today(),Slot = slot)
     # oncall_specific_query = OnCallSpecific({'cat' : incident.cat,'slot': specific_slot})
     oncall_specific_query = OnCallSpecific(cat = incident.cat,slot = specific_slot)
-    schedule = OnCallSpecific(oncall_specific_query)
+    schedule = search_specific_on_call_schedule(oncall_specific_query)
     assert len(schedule) <= 1
     if len(schedule) == 0:
         raise HTTPException(status_code=404, detail='specific schedule not found')
