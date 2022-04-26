@@ -1,4 +1,5 @@
 from datetime import datetime
+from socket import SOL_NETROM
 from token import OP
 from typing import List, Optional
 from unicodedata import category
@@ -47,12 +48,12 @@ class IncidentInfo(BaseModel):
     feedback: Optional[IncidentFeedback] = None
 
 class WeeklySlot(BaseModel):
-    Fn_id: str  #Responder id for forenoon/afternoon slots
-    An_id: str
+    Fn_id: Optional[str] = None #Responder id for forenoon/afternoon slots
+    An_id: Optional[str] = None
 
 class SpecificSlot(BaseModel):
     Date: datetime  
-    Time: str   #"An"/"Fn"
+    Slot: str   #"An"/"Fn"
 
 class OnCallWeekly(BaseModel):
     id: Optional[ObjectId] = Field(..., alias='_id')
