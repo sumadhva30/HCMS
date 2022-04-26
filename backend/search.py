@@ -1,22 +1,49 @@
+from typing import List
 from fastapi import FastAPI
 from pymongo import MongoClient
+from backend.Models import IncidentInfo, OnCallSpecific, OnCallWeekly, ResponderInfo, ResponderSummaryModel
+from dbaccess import database
 
-client = MongoClient()
-database = client["HCMS_db"]
 
 app = FastAPI()
 
-class Search:
+def search_incidents(query: IncidentInfo) -> List[IncidentInfo]:
+    eq_searchable = ['_id', 'cat', 'assigned', 'resolved', 'severity', 'resp_id', 'std_id']
+    # only sub is text searchable
 
-    def searchIncidents(query: dict):  # what format will the query be in? I assume we have to do some processing here
-        result = database["Incidents"].find(query)
-        return result
+    query_doc = {}
+    for k, v in query.dict(by_alias=True).items():
+        if v is not None and k in eq_searchable:
+            query_doc[k] = v
+        if v is not None and k == 'sub':
+            query_doc['$text'] = {'$search':v}
+    
+    return list(database["Incidents"].find(query_doc)[:100]) # todo paging
 
-    def searchResponders(query: dict):  # what format will the query be in? I assume we have to do some processing here
-        result = database["Responder"].find(query)
-        return result
+def search_responders(query: ResponderInfo) -> List[ResponderSummaryModel]:
+    # all fields eq searchable
+    query_doc = {k: v for k, v in query.dict(by_alias=True).items() if v is not None}
+    responders = list(database["Responders"].find(query_doc)[:100]) # todo paging
+    responders_dict = {r['_id']: ResponderSummaryModel(r) for r in responders}
 
-    def searchOnCallSchedule(query: dict):
-        # How does this work lol
-        pass
+    agg_incidents = database["Incidents"].aggregate([{
+        '$group': {
+            '_id': '$resp_id',
+            'open': {'$sum': {'$cond': ['$resolved', 0, 1]}},
+            'resolved': {'$sum': {'$cond': ['$resolved', 1, 0]}}
+        }
+    }])
+    # dirty join
+    for rec in agg_incidents:
+        rid = rec['_id']
+        responders_dict[rid].num_open_incidents = rec['open']
+        responders_dict[rid].num_resolved_incidents = rec['resolved']
+    
+    return list(responders_dict.values())
+
+def search_specific_oncall_schedule(query: OnCallSpecific) -> List[OnCallSpecific]:
+    pass
+
+def search_weekly_oncall_schedule(query: OnCallWeekly) -> List[OnCallWeekly]:
+    pass
 
