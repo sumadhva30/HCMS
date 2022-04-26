@@ -4,13 +4,14 @@ from fnmatch import fnmatch
 from Models import IncidentInfo
 from backend.Models import OnCallWeekly, WeeklySlot, OnCallSpecific, SpecificSlot
 from fastapi import HTTPException
-import record 
+from record import *
 
 def assign_incident(incident: IncidentInfo):
     responder = check_specific_oncall_schedule(incident)
     if len(responder) == 0:
         responder = check_weekly_oncall_schedule(incident)
     incident.resp_id = responder
+    insert_incident(incident)
 
     
 def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
@@ -67,14 +68,14 @@ def update_incident(incident: IncidentInfo) -> None:
     '''
     ##TODO: if feedback says not resolved, reopen issue
     if incident.msgs != None:
-        record.append_incident_msgs(incident)
+        append_incident_msgs(incident)
     elif incident.notes != None:
-        record.append_incident_notes(incident)
+        append_incident_notes(incident)
     else:
-        record.set_update_incident(incident)
+        set_update_incident(incident)
 
 def update_specific_oncall_schedule(oncall_specific: OnCallSpecific) -> None:
-    return record.record_specific_oncall_schedule(oncall_specific)
+    return record_specific_on_call_schedule(oncall_specific)
 
 def update_weekly_oncall_schedule(oncall_weekly: OnCallWeekly) -> None:
-    return record.record_weekly_oncall_schedule(oncall_weekly)
+    return record_weekly_on_call_schedule(oncall_weekly)
