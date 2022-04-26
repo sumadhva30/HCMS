@@ -1,10 +1,18 @@
 from datetime import datetime
-from fastapi import HTTPException
+from datetime import date
+from fnmatch import fnmatch
 from Models import IncidentInfo
-import dbaccess
-from backend.Models import OnCallSpecific, OnCallWeekly, WeeklySlot 
+from backend.Models import OnCallWeekly, WeeklySlot, OnCallSpecific, SpecificSlot
+from fastapi import HTTPException
+import dbaccess 
 
+def assign_incident(incident: IncidentInfo):
+    responder = check_specific_oncall_schedule(incident)
+    if len(responder) == 0:
+        responder = check_weekly_oncall_schedule(incident)
+    incident.resp_id = responder
 
+    
 def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
     '''_summary_
 
@@ -31,6 +39,23 @@ def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
         responder = weekly_slot.An_id
     
     return responder
+
+def check_specific_oncall_schedule(incident: IncidentInfo):
+
+    if datetime.now().hour <= 15:
+        time = "Fn"
+    else:
+        time = "An"
+    # specific_slot = SpecificSlot({'Date' : date.today(), 'Time': time})
+    specific_slot = SpecificSlot(Date = date.today(),Time = time)
+    # oncall_specific_query = OnCallSpecific({'cat' : incident.cat,'slot': specific_slot})
+    oncall_specific_query = OnCallSpecific(cat = incident.cat,slot = specific_slot)
+    schedule = dbaccess.OnCallSpecific(oncall_specific_query)
+    assert len(schedule) <= 1
+    if len(schedule) == 0:
+        raise HTTPException(status_code=404, detail='specific schedule not found')
+        
+    return schedule.resp_id
 
 def update_incident(incident: IncidentInfo) -> IncidentInfo:
     '''_summary_
