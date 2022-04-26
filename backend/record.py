@@ -4,18 +4,26 @@ from dbaccess import database
 
 from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
 
-app = FastAPI()
-
-
 def insert_incident(incident: IncidentInfo):  # Assuming input is in the right format
     return database["Incidents"].insert_one(incident)
-
-def update_incident(incident: IncidentInfo):
-    return database["Incidents"].replace_one({"_id": incident["_id"]}, incident)
 
 def delete_incident(incident: IncidentInfo):
     database["Incidents"].delete_one({"_id": incident["_id"]})
 
+def set_update_incident(query: IncidentInfo) -> None:
+    update_doc = {k: v for k, v in query.dict().items() if k is not None}
+    database["Incident"].update_one({"_id": query.id}, update_doc)
+
+def append_incident_msgs(query: IncidentInfo) -> None:
+    # assume there is a singleton msg
+    database["Incident"].update_one({"_id": query.id}, {
+        '$push': query.msgs[0].dict()
+    }) 
+
+def append_incident_notes(query: IncidentInfo) -> None:
+    database["Incident"].update_one({"_id": query.id}, {
+        '$push': query.notes[0].dict()
+    })
 
 def insert_responder(responder: ResponderInfo):
     return database["Responder"].insert_one(responder)
@@ -62,13 +70,4 @@ def record_weekly_on_call_schedule(schedule: OnCallWeekly):
 
 def recordSpecificOnCallSchedule(schedule: OnCallSpecific):
     
-    pass
-
-def set_update_incident(query: IncidentInfo) -> Optional[IncidentInfo]:
-    pass
-
-def append_incident_msgs(query: IncidentInfo) -> Optional[IncidentInfo]:
-    pass
-
-def append_incident_notes(query: IncidentInfo) -> Optional[IncidentInfo]:
     pass

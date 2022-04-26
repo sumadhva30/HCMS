@@ -33,7 +33,7 @@ class IncidentFeedback(BaseModel):
     comments: str
 
 
-class IncidentInfo(BaseModel):
+class IncidentInfo(BaseModel, allow_population_by_field_name=True):
     id: Optional[ObjectId] = Field(..., alias='_id')
     sub: Optional[str] = None #Subject
     cat: Optional[str] = None #incident categoty
@@ -71,7 +71,7 @@ class OnCallSpecific(BaseModel):
     cat: Optional[str] = None
     resp_id: Optional[str] = None
 
-class ResponderInfo(BaseModel):
+class ResponderInfo(BaseModel, allow_population_by_field_name=True):
     id: Optional[str] = Field(..., alias='_id')
     name: Optional[str] = None
     category: Optional[List[str]] = None

@@ -4,7 +4,7 @@ from fnmatch import fnmatch
 from Models import IncidentInfo
 from backend.Models import OnCallWeekly, WeeklySlot, OnCallSpecific, SpecificSlot
 from fastapi import HTTPException
-import dbaccess 
+import record 
 
 def assign_incident(incident: IncidentInfo):
     responder = check_specific_oncall_schedule(incident)
@@ -23,7 +23,7 @@ def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
     :rtype: str
     '''
     oncall_weekly_query = OnCallWeekly(cat = incident.cat)
-    schedule = dbaccess.search_weekly_oncall_schedule(oncall_weekly_query)
+    schedule = record.search_weekly_oncall_schedule(oncall_weekly_query)
     WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
     day = WEEKDAYS[datetime.now().weekday()]
 
@@ -50,14 +50,14 @@ def check_specific_oncall_schedule(incident: IncidentInfo):
     specific_slot = SpecificSlot(Date = date.today(),Time = time)
     # oncall_specific_query = OnCallSpecific({'cat' : incident.cat,'slot': specific_slot})
     oncall_specific_query = OnCallSpecific(cat = incident.cat,slot = specific_slot)
-    schedule = dbaccess.OnCallSpecific(oncall_specific_query)
+    schedule = OnCallSpecific(oncall_specific_query)
     assert len(schedule) <= 1
     if len(schedule) == 0:
         raise HTTPException(status_code=404, detail='specific schedule not found')
         
     return schedule.resp_id
 
-def update_incident(incident: IncidentInfo) -> IncidentInfo:
+def update_incident(incident: IncidentInfo) -> None:
     '''_summary_
 
     :param incident: contains id and values to update (or append in case of messages, notes)
@@ -65,15 +65,16 @@ def update_incident(incident: IncidentInfo) -> IncidentInfo:
     :return: updated incident
     :rtype: IncidentInfo
     '''
+    ##TODO: if feedback says not resolved, reopen issue
     if incident.msgs != None:
-        return dbaccess.append_incident_msgs(incident)
+        record.append_incident_msgs(incident)
     elif incident.notes != None:
-        return dbaccess.append_incident_notes(incident)
+        record.append_incident_notes(incident)
     else:
-        return dbaccess.set_update_incident(incident)
+        record.set_update_incident(incident)
 
-def update_specific_oncall_schedule(oncall_specific: OnCallSpecific) -> OnCallSpecific:
-    return dbaccess.set_specific_oncall_schedule(oncall_specific)
+def update_specific_oncall_schedule(oncall_specific: OnCallSpecific) -> None:
+    return record.record_specific_oncall_schedule(oncall_specific)
 
-def update_weekly_oncall_schedule(oncall_weekly: OnCallWeekly) -> OnCallWeekly:
-    return dbaccess.set_weekly_oncall_schedule(oncall_weekly)
+def update_weekly_oncall_schedule(oncall_weekly: OnCallWeekly) -> None:
+    return record.record_weekly_oncall_schedule(oncall_weekly)
