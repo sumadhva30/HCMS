@@ -53,7 +53,7 @@ class WeeklySlot(BaseModel):
 
 class SpecificSlot(BaseModel):
     Date: datetime  
-    Slot: str   #"An"/"Fn"
+    Time: str   #"An"/"Fn"
 
 class OnCallWeekly(BaseModel):
     id: Optional[ObjectId] = Field(..., alias='_id')
