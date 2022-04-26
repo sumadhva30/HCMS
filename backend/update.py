@@ -1,6 +1,5 @@
 from datetime import datetime
 from datetime import date
-from fnmatch import fnmatch
 from Models import IncidentInfo
 from backend.Models import OnCallWeekly, WeeklySlot, OnCallSpecific, SpecificSlot
 from fastapi import HTTPException

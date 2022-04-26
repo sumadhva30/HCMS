@@ -1,5 +1,3 @@
-from typing import Optional
-from fastapi import FastAPI
 from dbaccess import database
 
 from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
