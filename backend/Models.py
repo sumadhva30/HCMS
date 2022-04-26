@@ -1,6 +1,8 @@
 from datetime import datetime
 from token import OP
 from typing import List, Optional
+from unicodedata import category
+from bson import ObjectId
 from pydantic import BaseModel, Field
 from dbaccess import PyObjectId
 
@@ -32,6 +34,7 @@ class IncidentFeedback(BaseModel):
 
 
 class IncidentInfo(BaseModel):
+    id: Optional[ObjectId] = Field(..., alias='_id')
     sub: Optional[str] = None #Subject
     cat: Optional[str] = None #incident categoty
     assigned: Optional[bool] = None
@@ -52,6 +55,7 @@ class SpecificSlot(BaseModel):
     Time: str   #"An"/"Fn"
 
 class OnCallWeekly(BaseModel):
+    id: Optional[ObjectId] = Field(..., alias='_id')
     cat: Optional[str] = None
     monday: Optional[WeeklySlot] = None
     tuesday: Optional[WeeklySlot] = None
@@ -62,14 +66,13 @@ class OnCallWeekly(BaseModel):
     sunday: Optional[WeeklySlot] = None
 
 class OnCallSpecific(BaseModel):
+    id: Optional[ObjectId] = Field(..., alias='_id')
     slot: Optional[SpecificSlot] = None
     cat: Optional[str] = None
     resp_id: Optional[str] = None
 
-class ResponderModel(BaseModel, allow_population_by_field_name=True):
-    id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias='_id')
-    name: Optional[str]
-    categories: Optional[List[str]]
+class ResponderInfo(BaseModel):
+    id: Optional[str] = Field(..., alias='_id')
+    name: Optional[str] = None
+    category: Optional[List[str]] = None
 
-class CategoryModel(BaseModel):
-    pass
