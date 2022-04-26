@@ -33,19 +33,18 @@ def delete_responder(responder_id: str):
 
 
 def insert_category(cat: str):
-    return database["Category"].find_one()["categories"].append(cat)
+    database["Category"].update_one({}, {"$push": {"categories": cat}})
 
 def update_category(old_cat: str, new_cat: str):
-    cats = database["Category"].find_one()["categories"]
-    cats.remove(old_cat)
-    cats.append(new_cat)
+    database["Category"].update_one({}, {"$pull": {"categories": old_cat}})
+    database["Category"].update_one({}, {"$push": {"categories": new_cat}})
     _ = database["Responder"].update_many({"cat": old_cat}, {"$set": {"cat": new_cat}})
     _ = database["Incidents"].update_many({"cat": old_cat}, {"$set": {"cat": new_cat}})
     _ = database["weekly_schedule"].update_one({"cat": old_cat}, {"$set": {"cat": new_cat}})
     _ = database["specific_schedule"].update_many({"cat": old_cat}, {"$set": {"cat": new_cat}})
 
 def delete_category(cat: str):
-    database["Category"].find_one()["categories"].remove(cat)
+    database["Category"].update_one({}, {"$pull": {"categories": cat}})
 
 
 def record_weekly_on_call_schedule(schedule: OnCallWeekly):
@@ -53,16 +52,19 @@ def record_weekly_on_call_schedule(schedule: OnCallWeekly):
         return
     cat_schedule = database["weekly_schedule"].find_one({"cat": schedule.cat})
     for day, slot in vars(schedule):
-        if day == "cat":
+        if day in ("id", "cat"):
             continue
         if slot.Fn_id:
             cat_schedule[day]["Fn"] = slot.Fn_id
         if slot.An_id:
             cat_schedule[day]["An"] = slot.An_id
+    
 
-def recordSpecificOnCallSchedule(schedule: OnCallSpecific):
+def record_specific_on_call_schedule(schedule: OnCallSpecific):
     
     pass
+
+
 
 def set_update_incident(query: IncidentInfo) -> Optional[IncidentInfo]:
     pass
