@@ -8,74 +8,135 @@ from fastapi import FastAPI
 from typing import List, Optional
 from pydantic import BaseModel
 from pymongo import MongoClient
-
-client = MongoClient()
-database = client['HCMS_db']
+from Models import *
 
 app = FastAPI()
-
-
-#Ticket info provided by student while raising ticket(apart from student info)
-class TicketInfo(BaseModel):
-    id: str    # Student roll number
-    cat: str   #Problem_category
-    desc: str  #Problem_desc
-
-#This is not required..? We're storing only Student-id in incident.
-class StudentInfo(BaseModel):
-    pass
-
-#Notes, posted by admin/responder
-class IncidentNotes(BaseModel):
-    sender_id: str
-    note: str
-    timeStamp: datetime
-
-#Msgs, btw student and responder
-class IncidentMsgs(BaseModel):
-    sender_id: str
-    msg: str
-    timeStamp: datetime
-
-#Feedback provided by student
-class IncidentFeedback(BaseModel):
-    resolved: bool
-    act_rating: int        #Action rating (1-5)
-    respTime_rating: int   #Response_time rating (1-5)
-    comments: str
-
-
-class IncidentInfo(BaseModel):
-    sub: Optional[str] = None #Subject
-    cat: Optional[str] = None #incident categoty
-    assigned: Optional[bool] = None
-    resolved: Optional[bool] = None
-    severity: Optional[int] = None
-    resp_id: Optional[str] = None
-    std_id: Optional[str] = None
-    notes: Optional[List[IncidentNotes]] = None
-    msgs: Optional[List[IncidentMsgs]] = None
-    feedback: Optional[IncidentFeedback] = None
-
-
-
-
-def getStudentInfo(id: str):
-    collection = database['Student_Info']
-    info = collection.find({"_id":id}) #search on roll no:
-    return info
 
 def raiseTicket(TktInfo : TicketInfo):
     '''Function to raise a ticket after taking required student info.
        Return value is nothing but 'Incident Info'
     '''
-    #call asssign Incident
-    #return incident
+    newIncident = IncidentInfo(sub=TktInfo.desc, cat=TktInfo.cat, std_id=TktInfo.id)
+    #asssignIncident(newIncident)
 
-@app.put("/raiseticket") ##wtf is URL supposed to be brah
-def getTicketInfo(tkt : TicketInfo):
+
+@app.put("/student/raiseticket") 
+def putTicketInfo(tkt : TicketInfo):
+    raiseTicket(tkt)
+
+
+##------------Admin put funcs------------##
+
+@app.put("/updateincident") #Todo --URL changes
+def putUpdateIncident(updatedIncident : IncidentInfo):
     pass
-    #Just call raiseTicket with tkt?
+    #Make sure user is admin.
+    #Appropriate priveleges
+    # if not is_admin(get_curr_user()):
+    #     raise HTTPException(status_code=404, detail="You do not have permission") --raise exception
+    #     return error to UI
+       
+    #Calls updateIncident. Update those fields which are not None.
+
+@app.put("/admin/updateOncallWeekly") 
+def putOncallWeekly(updatedOncallW : OnCallWeekly):
+    pass
+    #Calls updateOncallWeekly. Update those fields which are not None.
+
+@app.put("/admin/updateOncallSpecific") 
+def putOncallSpecific(updatedOncallS : OnCallSpecific):
+    pass
+    #Calls updateOncallSpecific. Update those fields which are not None.
+
+@app.put("/admin/updateResponderInfo") 
+def updateResponderInfo(updateResp : ResponderInfo):
+    #Make sure user is admin.
+    # if not is_admin(get_curr_user()):
+    #     raise HTTPException(status_code=404, detail="You do not have permission") --raise exception
+    #     return error to UI
+    pass
+    #Calls updateResponderInfo. Update those fields which are not None.
+
+@app.post("/admin/insertResponderInfo") 
+def insertResponderInfo(newResp : ResponderInfo):
+    #Make sure user is admin.
+    # if not is_admin(get_curr_user()):
+    #     raise HTTPException(status_code=404, detail="You do not have permission") --raise exception
+    #     return error to UI
+    pass
+    #Calls insertResponderInfo. Update those fields which are not None.
+
+@app.delete("/admin/delResponderInfo") 
+def delResponderInfo(respId: str):
+    #Make sure user is admin.
+    # if not is_admin(get_curr_user()):
+    #     raise HTTPException(status_code=404, detail="You do not have permission") --raise exception
+    #     return error to UI
+    pass
+    #Calls insertResponderInfo. Update those fields which are not None.
+
+@app.put("/admin/updateCategoryInfo") 
+def updateCategoryInfo(oldCatName : str, newCatName):
+    #Make sure user is admin.
+    # if not is_admin(get_curr_user()):
+    #     raise HTTPException(status_code=404, detail="You do not have permission") --raise exception
+    #     return error to UI
+    pass
+    #Calls updateCategoryInfo. Update those fields which are not None.
+
+@app.post("/admin/insertCategoryInfo") 
+def insertCategoryInfo(newCat : str):
+    #Make sure user is admin.
+    # if not is_admin(get_curr_user()):
+    #     raise HTTPException(status_code=404, detail="You do not have permission") --raise exception
+    #     return error to UI
+    pass
+    #Calls updateCategoryInfo. Update those fields which are not None.
+
+@app.delete("/admin/updateCategoryInfo") 
+def updateCategoryInfo(updateCat : str):
+    #Make sure user is admin.
+    # if not is_admin(get_curr_user()):
+    #     raise HTTPException(status_code=404, detail="You do not have permission") --raise exception
+    #     return error to UI
+    pass
+    #Calls updateCategoryInfo. Update those fields which are not None.
+
+
+
+@app.get("/admin/incidentQuery") 
+def getIncident(incidentQuery : IncidentInfo):
+    pass
+    #Calls IncidentQuery.
+    #Make sure user is admin.
+    # if not is_admin(get_curr_user()):
+    #     raise HTTPException(status_code=404, detail="You do not have permission") --raise exception
+    #     return error to UI
+    #return Incident(s) as an array of IncidentInfo's
+
+@app.get("/admin/OnCallWeeklyQuery") 
+def getOnCallWeekly(respId: str, catName: str):
+    pass
+    #Calls OnCallWeekly
+
+
+@app.get("/admin/OnCallSpecificQuery") 
+def getOncallSpecific(respId: str, catName: str):
+    pass
+    #Calls IncidentQuery. Update those fields which are not None.
+    #return Incident(s) as an array of IncidentInfo's
+
+@app.get("/student/incidentQuery") 
+def getIncident(incidentQuery : IncidentInfo):
+    pass
+    #Calls IncidentQuery. Update those fields which are not None.
+    #return Incident(s) as an array of IncidentInfo's
+
+@app.get("/responder/incidentQuery") 
+def getIncident(incidentQuery : IncidentInfo):
+    pass
+    #Calls IncidentQuery. Update those fields which are not None.
+    #return Incident(s) as an array of IncidentInfo's
 
 
 
