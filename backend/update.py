@@ -6,6 +6,14 @@ from backend.Models import OnCallSpecific, OnCallWeekly, WeeklySlot
 
 
 def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
+    '''_summary_
+
+    :param incident: contains category
+    :type incident: IncidentInfo
+    :raises HTTPException: 404 if weekly schedule not found
+    :return: responder id
+    :rtype: str
+    '''
     oncall_weekly_query = OnCallWeekly(cat = incident.cat)
     schedule = dbaccess.search_weekly_oncall_schedule(oncall_weekly_query)
     WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
@@ -25,6 +33,13 @@ def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
     return responder
 
 def update_incident(incident: IncidentInfo) -> IncidentInfo:
+    '''_summary_
+
+    :param incident: contains id and values to update (or append in case of messages, notes)
+    :type incident: IncidentInfo
+    :return: updated incident
+    :rtype: IncidentInfo
+    '''
     if incident.msgs != None:
         return dbaccess.append_incident_msgs(incident)
     elif incident.notes != None:
