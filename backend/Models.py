@@ -71,5 +71,9 @@ class ResponderModel(BaseModel, allow_population_by_field_name=True):
     name: Optional[str]
     categories: Optional[List[str]]
 
+class ResponderSummaryModel(ResponderModel):
+    num_open_incidents: int
+    num_resolved_incidents: int
+
 class CategoryModel(BaseModel):
     pass

@@ -4,7 +4,7 @@ import Models
 
 from pymongo import MongoClient
 
-from backend.Models import IncidentInfo, OnCallSpecific, OnCallWeekly, ResponderModel
+from backend.Models import IncidentInfo, OnCallSpecific, OnCallWeekly, ResponderModel, ResponderSummaryModel
 client = MongoClient()
 
 db = client['HCMS_db']
@@ -26,10 +26,39 @@ class PyObjectId(ObjectId):
 
 #Search
 def search_incidents(query: IncidentInfo) -> List[IncidentInfo]:
-    pass
+    eq_searchable = ['_id', 'cat', 'assigned', 'resolved', 'severity', 'resp_id', 'std_id']
+    # only sub is text searchable
 
-def search_responders(query: ResponderModel) -> List[ResponderModel]:
-    pass
+    query_doc = {}
+    for k, v in query.dict(by_alias=True).items():
+        if v is not None and k in eq_searchable:
+            query_doc[k] = v
+        if v is not None and k == 'sub':
+            query_doc['$text'] = {'$search':v}
+    
+    return list(db.incidents.find(query_doc)[:100]) # todo paging
+
+def search_responders(query: ResponderModel) -> List[ResponderSummaryModel]:
+    # all fields eq searchable
+    query_doc = {k: v for k, v in query.dict(by_alias=True).items() if v is not None}
+    responders = list(db.responders.find(query_doc)[:100]) # todo paging
+    responders_dict = {r['_id']: ResponderSummaryModel(r) for r in responders}
+
+    agg_incidents = db.incidents.aggregate([{
+        '$group': {
+            '_id': '$resp_id',
+            'open': {'$sum': {'$cond': ['$resolved', 0, 1]}},
+            'resolved': {'$sum': {'$cond': ['$resolved', 1, 0]}}
+        }
+    }])
+    # dirty join
+    for rec in agg_incidents:
+        rid = rec['_id']
+        responders_dict[rid].num_open_incidents = rec['open']
+        responders_dict[rid].num_resolved_incidents = rec['resolved']
+    
+    return list(responders_dict.values())
+
 
 def search_specific_oncall_schedule(query: OnCallSpecific) -> List[OnCallSpecific]:
     pass
@@ -64,5 +93,5 @@ def upsert_responder(query: ResponderModel) -> ResponderModel:
 def delete_responder(query: ResponderModel) -> Optional[ResponderModel]:
     pass
 
-def upsert_category(query: CategoryModel) -> CategoryModel:
+def upsert_category(query: str) -> str:
     pass
