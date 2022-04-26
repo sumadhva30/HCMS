@@ -22,17 +22,11 @@ async def read_root():
 def read_item(item_id: int, q: Optional[str] = None):
     return {"item_id": item_id, "q": q}
 
-is_admin
-is_responder
-is_student
-get_email()
 
-@app.get("/incidents/search")
-def input_search_incidents():
-    ...
-    if(not is_admin()) {
+@app.get("/responders/search")
+def input_search_responders():
+    if(not is_admin()):
         return some error
-    }
     query = read request body
     ret = search_incidents(query)
     return processed ret
