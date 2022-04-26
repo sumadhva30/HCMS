@@ -1,4 +1,5 @@
 from datetime import datetime
+from socket import SOL_NETROM
 from token import OP
 from typing import List, Optional
 from unicodedata import category
@@ -33,7 +34,7 @@ class IncidentFeedback(BaseModel):
     comments: str
 
 
-class IncidentInfo(BaseModel):
+class IncidentInfo(BaseModel, allow_population_by_field_name=True):
     id: Optional[ObjectId] = Field(..., alias='_id')
     sub: Optional[str] = None #Subject
     cat: Optional[str] = None #incident categoty
@@ -47,12 +48,12 @@ class IncidentInfo(BaseModel):
     feedback: Optional[IncidentFeedback] = None
 
 class WeeklySlot(BaseModel):
-    Fn_id: str  #Responder id for forenoon/afternoon slots
-    An_id: str
+    Fn_id: Optional[str] = None #Responder id for forenoon/afternoon slots
+    An_id: Optional[str] = None
 
 class SpecificSlot(BaseModel):
     Date: datetime  
-    Time: str   #"An"/"Fn"
+    Slot: str   #"An"/"Fn"
 
 class OnCallWeekly(BaseModel):
     id: Optional[ObjectId] = Field(..., alias='_id')
@@ -71,7 +72,7 @@ class OnCallSpecific(BaseModel):
     cat: Optional[str] = None
     resp_id: Optional[str] = None
 
-class ResponderInfo(BaseModel):
+class ResponderInfo(BaseModel, allow_population_by_field_name=True):
     id: Optional[str] = Field(..., alias='_id')
     name: Optional[str] = None
     category: Optional[List[str]] = None
