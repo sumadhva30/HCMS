@@ -14,7 +14,7 @@ def delete_incident(incident: IncidentInfo):
 
 def set_update_incident(query: IncidentInfo) -> None:
     update_doc = {k: v for k, v in query.dict().items() if v is not None}
-    database["Incident"].update_one({"_id": query.id}, update_doc)
+    database["Incident"].update_one({"_id": query.id}, {"$set": update_doc})
 
 def append_incident_msgs(query: IncidentInfo) -> None:
     # assume there is a singleton msg
