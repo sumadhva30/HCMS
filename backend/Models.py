@@ -32,10 +32,6 @@ class IncidentFeedback(BaseModel):
     respTime_rating: int   #Response_time rating (1-5)
     comments: str
 
-class ResponderInfo(BaseModel):
-    id: Optional[str] = Field(..., alias='_id')
-    name: Optional[str] = None
-    category: Optional[List[str]] = None
 
 class IncidentInfo(BaseModel):
     id: Optional[ObjectId] = Field(..., alias='_id')
@@ -75,10 +71,8 @@ class OnCallSpecific(BaseModel):
     cat: Optional[str] = None
     resp_id: Optional[str] = None
 
-class ResponderModel(BaseModel, allow_population_by_field_name=True):
-    id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias='_id')
-    name: Optional[str]
-    categories: Optional[List[str]]
+class ResponderInfo(BaseModel):
+    id: Optional[str] = Field(..., alias='_id')
+    name: Optional[str] = None
+    category: Optional[List[str]] = None
 
-class CategoryModel(BaseModel):
-    pass
