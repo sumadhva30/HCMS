@@ -4,6 +4,7 @@ from typing import List, Optional
 from unicodedata import category
 from bson import ObjectId
 from pydantic import BaseModel, Field
+from dbaccess import PyObjectId
 
 #Ticket info provided by student while raising ticket(apart from student info)
 class TicketInfo(BaseModel):
@@ -74,3 +75,10 @@ class OnCallSpecific(BaseModel):
     cat: Optional[str] = None
     resp_id: Optional[str] = None
 
+class ResponderModel(BaseModel, allow_population_by_field_name=True):
+    id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias='_id')
+    name: Optional[str]
+    categories: Optional[List[str]]
+
+class CategoryModel(BaseModel):
+    pass
