@@ -1,4 +1,5 @@
 from datetime import datetime
+from token import OP
 from typing import List, Optional
 from pydantic import BaseModel
 
@@ -46,12 +47,18 @@ class WeeklySlot(BaseModel):
     An_id: str
 
 class SpecificSlot(BaseModel):
-    Date: str  
+    Date: datetime  
     Time: str   #"An"/"Fn"
 
 class OnCallWeekly(BaseModel):
     cat: Optional[str] = None
-    schedule: Optional[List[WeeklySlot]] = None
+    monday: Optional[WeeklySlot] = None
+    tuesday: Optional[WeeklySlot] = None
+    wednesday: Optional[WeeklySlot] = None
+    thursday: Optional[WeeklySlot] = None
+    friday: Optional[WeeklySlot] = None
+    saturday: Optional[WeeklySlot] = None
+    sunday: Optional[WeeklySlot] = None
 
 class OnCallSpecific(BaseModel):
     slot: Optional[SpecificSlot] = None
