@@ -1,0 +1,124 @@
+{
+	"category":"Civil_Complaints",
+	"Monday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Tuesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Wednesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Thursday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Friday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Saturday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Sunday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" }
+
+}
+
+{
+	"category":"Electrical_Complaints",
+	"Monday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Tuesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Wednesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Thursday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Friday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Saturday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Sunday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" }
+
+}
+
+{
+	"category":"Water_Dispensers",
+	"Monday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Tuesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Wednesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Thursday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Friday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Saturday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Sunday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" }
+
+}
+
+{
+	"category":"Washing_Machines",
+	"Monday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Tuesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Wednesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Thursday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Friday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Saturday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Sunday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" }
+
+}
+
+{
+	"category":"Food_Facility",
+	"Monday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Tuesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Wednesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Thursday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Friday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Saturday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Sunday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" }
+
+}
+
+{
+	"category":"Pest_Control",
+	"Monday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Tuesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Wednesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Thursday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Friday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Saturday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Sunday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" }
+
+}
+
+{
+	"category":"Housekeeping",
+	"Monday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Tuesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Wednesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Thursday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Friday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Saturday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Sunday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" }
+
+}
+
+{
+	"category":"Green_office",
+	"Monday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Tuesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Wednesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Thursday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Friday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Saturday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Sunday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" }
+
+}
+
+{
+	"category":"Furniture",
+	"Monday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Tuesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Wednesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Thursday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Friday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Saturday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Sunday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" }
+
+}
+
+{
+	"category":"Other",
+	"Monday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Tuesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Wednesday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Thursday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Friday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Saturday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" },
+	"Sunday": {"Fn": "responder1@iith.ac.in", "An": "responder2@iith.ac.in" }
+
+}
+
+
+
+
+
