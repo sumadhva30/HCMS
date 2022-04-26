@@ -1,10 +1,8 @@
+from typing import Optional
 from fastapi import FastAPI
-from pymongo import MongoClient
+from dbaccess import database
 
 from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
-
-client = MongoClient()
-database = client["HCMS_db"]
 
 app = FastAPI()
 
@@ -64,4 +62,13 @@ def record_weekly_on_call_schedule(schedule: OnCallWeekly):
 
 def recordSpecificOnCallSchedule(schedule: OnCallSpecific):
     
+    pass
+
+def set_update_incident(query: IncidentInfo) -> Optional[IncidentInfo]:
+    pass
+
+def append_incident_msgs(query: IncidentInfo) -> Optional[IncidentInfo]:
+    pass
+
+def append_incident_notes(query: IncidentInfo) -> Optional[IncidentInfo]:
     pass

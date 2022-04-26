@@ -76,3 +76,6 @@ class ResponderInfo(BaseModel):
     name: Optional[str] = None
     category: Optional[List[str]] = None
 
+class ResponderSummaryModel(ResponderInfo):
+    num_open_incidents: int
+    num_resolved_incidents: int
