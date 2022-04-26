@@ -1,4 +1,5 @@
 from datetime import datetime
+from tokenize import Name
 from typing import List, Optional
 from unicodedata import category
 from bson import ObjectId
@@ -36,7 +37,7 @@ class IncidentFeedback(BaseModel):
 
 
 class IncidentInfo(BaseModel, allow_population_by_field_name=True):
-    id: Optional[PyObjectId] = Field(..., alias='_id')
+    id: Optional[PyObjectId] = Field(alias='_id')
     sub: Optional[str] = None #Subject
     cat: Optional[str] = None #incident categoty
     assigned: Optional[bool] = None
@@ -57,7 +58,7 @@ class SpecificSlot(BaseModel):
     Time: str   #"An"/"Fn"
 
 class OnCallWeekly(BaseModel, allow_population_by_field_name=True):
-    id: Optional[PyObjectId] = Field(..., alias='_id')
+    id: Optional[PyObjectId] = Field(alias='_id')
     cat: Optional[str] = None
     monday: Optional[WeeklySlot] = None
     tuesday: Optional[WeeklySlot] = None
@@ -67,14 +68,19 @@ class OnCallWeekly(BaseModel, allow_population_by_field_name=True):
     saturday: Optional[WeeklySlot] = None
     sunday: Optional[WeeklySlot] = None
 
+class OnCallWeeklyQuery(BaseModel):
+    resp_id: Optional[str] = None
+    cat: Optional[str] = None
+    date: Optional[datetime] = None
+
 class OnCallSpecific(BaseModel, allow_population_by_field_name=True):
-    id: Optional[PyObjectId] = Field(..., alias='_id')
+    id: Optional[PyObjectId] = Field(alias='_id')
     slot: Optional[SpecificSlot] = None
     cat: Optional[str] = None
     resp_id: Optional[str] = None
 
 class ResponderInfo(BaseModel, allow_population_by_field_name=True):
-    id: Optional[str] = Field(..., alias='_id')
+    id: Optional[str] = Field(alias='_id')
     name: Optional[str] = None
     category: Optional[List[str]] = None
 
