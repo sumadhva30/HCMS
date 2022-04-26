@@ -1,7 +1,9 @@
 from datetime import datetime
 from token import OP
 from typing import List, Optional
-from pydantic import BaseModel
+from unicodedata import category
+from bson import ObjectId
+from pydantic import BaseModel, Field
 
 #Ticket info provided by student while raising ticket(apart from student info)
 class TicketInfo(BaseModel):
@@ -29,8 +31,13 @@ class IncidentFeedback(BaseModel):
     respTime_rating: int   #Response_time rating (1-5)
     comments: str
 
+class ResponderInfo(BaseModel):
+    id: Optional[str] = Field(..., alias='_id')
+    name: Optional[str] = None
+    category: Optional[List[str]] = None
 
 class IncidentInfo(BaseModel):
+    id: Optional[ObjectId] = Field(..., alias='_id')
     sub: Optional[str] = None #Subject
     cat: Optional[str] = None #incident categoty
     assigned: Optional[bool] = None
@@ -51,6 +58,7 @@ class SpecificSlot(BaseModel):
     Time: str   #"An"/"Fn"
 
 class OnCallWeekly(BaseModel):
+    id: Optional[ObjectId] = Field(..., alias='_id')
     cat: Optional[str] = None
     monday: Optional[WeeklySlot] = None
     tuesday: Optional[WeeklySlot] = None
@@ -61,6 +69,7 @@ class OnCallWeekly(BaseModel):
     sunday: Optional[WeeklySlot] = None
 
 class OnCallSpecific(BaseModel):
+    id: Optional[ObjectId] = Field(..., alias='_id')
     slot: Optional[SpecificSlot] = None
     cat: Optional[str] = None
     resp_id: Optional[str] = None
