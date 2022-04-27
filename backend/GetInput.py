@@ -14,12 +14,11 @@ from pymongo import MongoClient
 from starlette import SessionMiddleware
 from requests import get
 from Models import *
-from backend.auth import only_admin
 from search import *
 from record import *
 from update import *
 from dbaccess import get_student_info
-from auth import my_email, atleast_responder
+from auth import *
 
 secret_key = os.environ['SESSION_SECRET']
 
@@ -32,7 +31,8 @@ def raiseTicket(TktInfo : TicketInfo):
     '''
     StdInfo = get_student_info(TktInfo.id)
     StdInfObj = StudentInfo(**StdInfo)
-    newIncident = IncidentInfo(sub=TktInfo.desc, cat=TktInfo.cat, std_info=StdInfObj)
+    initial_desc = IncidentMsgs(sender_id=TktInfo.id, msg=TktInfo.desc, timeStamp=datetime.now())
+    newIncident = IncidentInfo(sub=TktInfo.sub, cat=TktInfo.cat, std_info=StdInfObj, msgs=[initial_desc])
     assign_incident(newIncident)
 
 def is_admin(id: str):
@@ -134,4 +134,10 @@ async def getOncallSpecific(specificSchedQuery: OnCallSpecific):
     return onCallList
 
 
+@app.post("/gsignin")
+async def sign_in(credential_response: GoogleCredentialResponse, request: Request):
+    return google_landing(credential_response.credential, request)
 
+@app.post("/signout")
+async def sign_out(request: Request):
+    return google_logout(request)

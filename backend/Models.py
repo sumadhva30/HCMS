@@ -10,6 +10,7 @@ from dbaccess import PyObjectId
 class TicketInfo(BaseModel):
     id: str    # Student roll number
     cat: str   #Problem_category
+    sub: str   #Problem_title
     desc: str  #Problem_desc
 
 
@@ -90,3 +91,6 @@ class ResponderInfo(BaseModel, allow_population_by_field_name=True):
 class ResponderSummaryModel(ResponderInfo):
     num_open_incidents: int
     num_resolved_incidents: int
+
+class GoogleCredentialResponse(BaseModel):
+    credential: str # only this is required
