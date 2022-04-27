@@ -14,8 +14,11 @@ class TicketInfo(BaseModel):
 
 
 class StudentInfo(BaseModel):
-    pass
-
+    id: Optional[str] = Field(alias='_id')
+    name: Optional[str] = None
+    room_no: Optional[str] = None
+    ph_no: Optional[str] = None
+    
 #Notes, posted by admin/responder
 class IncidentNotes(BaseModel):
     sender_id: str
@@ -44,7 +47,7 @@ class IncidentInfo(BaseModel, allow_population_by_field_name=True):
     resolved: Optional[bool] = None #student
     severity: Optional[int] = None
     resp_id: Optional[str] = None
-    std_id: Optional[str] = None
+    std_info: Optional[StudentInfo] = None
     notes: Optional[List[IncidentNotes]] = None
     msgs: Optional[List[IncidentMsgs]] = None #student
     feedback: Optional[IncidentFeedback] = None #student

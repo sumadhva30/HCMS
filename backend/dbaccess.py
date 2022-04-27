@@ -7,6 +7,11 @@ client = MongoClient()
 
 database = client['HCMS_db']
 
+def get_student_info(std_id):
+    collection = database['Student_info']
+    return collection.find({"_id" : std_id})
+
+
 class PyObjectId(ObjectId):
     @classmethod
     def __get_validators__(cls):
