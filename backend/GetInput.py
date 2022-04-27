@@ -1,5 +1,6 @@
 import copy
 from datetime import datetime
+import os
 # from lib2to3.pgen2.token import OP
 from pydoc import resolve
 from typing import Optional
@@ -8,9 +9,13 @@ from fastapi import FastAPI
 from typing import List, Optional
 from pydantic import BaseModel
 from pymongo import MongoClient
+from starlette import SessionMiddleware
 from Models import *
 
+secret_key = os.environ['SESSION_SECRET']
+
 app = FastAPI()
+app.add_middleware(SessionMiddleware, secret_key=secret_key)
 
 def raiseTicket(TktInfo : TicketInfo):
     '''Function to raise a ticket after taking required student info.
