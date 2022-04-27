@@ -13,6 +13,10 @@ def get_student_info(std_id):
     for inf in info:
         return inf
 
+def all_admins():
+    cursor = database["Admins"].find()
+    return [admin["email"] for admin in cursor]
+
 
 class PyObjectId(ObjectId):
     @classmethod
