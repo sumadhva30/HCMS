@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from tokenize import Name
 from typing import List, Optional
 from unicodedata import category
@@ -57,7 +57,7 @@ class WeeklySlot(BaseModel):
     An_id: Optional[str] = None
 
 class SpecificSlot(BaseModel):
-    Date: datetime  
+    Date: date
     Time: str   #"An"/"Fn"
 
 class OnCallWeekly(BaseModel, allow_population_by_field_name=True):
