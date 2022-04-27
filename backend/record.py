@@ -5,7 +5,7 @@ from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
 ## Incident Functions
 
 def insert_incident(incident: IncidentInfo):  # Assuming input is in the right format
-    database["Incidents"].insert_one(incident.dict(by_alias=True, exclude={'_id'}))
+    database["Incidents"].insert_one(incident.dict(by_alias=True, exclude={'id'}))
 
 def set_update_incident(query: IncidentInfo) -> None:
     update_doc = {k: v for k, v in query.dict(by_alias=True).items() if v is not None}

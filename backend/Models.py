@@ -54,8 +54,8 @@ class IncidentInfo(BaseModel, allow_population_by_field_name=True):
     feedback: Optional[IncidentFeedback] = None #student
 
 class WeeklySlot(BaseModel):
-    Fn_id: Optional[str] = None #Responder id for forenoon/afternoon slots
-    An_id: Optional[str] = None
+    Fn: Optional[str] = None #Responder id for forenoon/afternoon slots
+    An: Optional[str] = None
 
 class SpecificSlot(BaseModel):
     Date: datetime

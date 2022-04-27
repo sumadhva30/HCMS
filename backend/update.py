@@ -1,4 +1,5 @@
 from datetime import datetime
+import sys
 from datetime import date
 from Models import *
 from fastapi import HTTPException
@@ -35,12 +36,13 @@ def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
         return None
     #     raise HTTPException(status_code=404, detail='weekly schedule not found')
     
-    weekly_slot : WeeklySlot = getattr(schedule[0], day)
-    
+    oncall_weekly = OnCallWeekly(**schedule[0])
+    weekly_slot : WeeklySlot = getattr(oncall_weekly, day)
+
     if datetime.now().hour <= 15:
-        responder = weekly_slot.Fn_id
+        responder = weekly_slot.Fn
     else:
-        responder = weekly_slot.An_id
+        responder = weekly_slot.An
     
     return responder
 
