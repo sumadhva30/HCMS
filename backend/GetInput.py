@@ -11,15 +11,14 @@ from fastapi import FastAPI
 from typing import List, Optional
 from pydantic import BaseModel
 from pymongo import MongoClient
-from starlette import SessionMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from requests import get
 from Models import *
-from backend.auth import only_admin
 from search import *
 from record import *
 from update import *
 from dbaccess import get_student_info
-from auth import my_email, atleast_responder
+from auth import *
 
 secret_key = os.environ['SESSION_SECRET']
 
@@ -135,4 +134,10 @@ async def getOncallSpecific(specificSchedQuery: OnCallSpecific):
     return onCallList
 
 
+@app.post("/gsignin")
+async def sign_in(credential_response: GoogleCredentialResponse, request: Request):
+    return google_landing(credential_response.credential, request)
 
+@app.post("/signout")
+async def sign_out(request: Request):
+    return google_logout(request)

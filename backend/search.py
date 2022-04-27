@@ -40,9 +40,9 @@ def search_responders(query: ResponderInfo) -> List[ResponderSummaryModel]:
     return list(responders_dict.values())
 
 def search_specific_oncall_schedule(query: OnCallSpecific) -> List[OnCallSpecific]:
-    search_options = {k: v for k, v in query.dict().items if v is not None}
-    return database["specific_schedule"].find({search_options})
+    search_options = {k: v for k, v in query.dict(by_alias=True).items() if v is not None}
+    return list(database["specific_schedule"].find(search_options)[:100])
 
 def search_weekly_oncall_schedule(query: OnCallWeekly) -> List[OnCallWeekly]:
-    return database["weekly_schedule"].find({"cat": query.cat})
+    return list(database["weekly_schedule"].find({"cat": query.cat})[:100])
 

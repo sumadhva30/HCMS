@@ -8,7 +8,7 @@ client = MongoClient()
 database = client['HCMS_db']
 
 def get_student_info(std_id):
-    collection = database['Student_info']
+    collection = database['Student_Info']
     info =  collection.find({"_id" : std_id})
     for inf in info:
         return inf

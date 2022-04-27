@@ -5,18 +5,18 @@ from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
 ## Incident Functions
 
 def insert_incident(incident: IncidentInfo):  # Assuming input is in the right format
-    database["Incidents"].insert_one(incident)
+    database["Incidents"].insert_one(incident.dict(by_alias=True, exclude={'_id'}))
 
 def set_update_incident(query: IncidentInfo) -> None:
-    update_doc = {k: v for k, v in query.dict().items() if v is not None}
-    database["Incident"].update_one({"_id": query.id}, {"$set": update_doc})
+    update_doc = {k: v for k, v in query.dict(by_alias=True).items() if v is not None}
+    database["Incidents"].update_one({"_id": query.id}, {"$set": update_doc})
 
 def append_incident_msgs(query: IncidentInfo) -> None:
     # assume there is a singleton msg
-    database["Incident"].update_one({"_id": query.id}, {'$push': query.msgs[0].dict()}) 
+    database["Incidents"].update_one({"_id": query.id}, {'$push': query.msgs[0].dict(by_alias=True)}) 
 
 def append_incident_notes(query: IncidentInfo) -> None:
-    database["Incident"].update_one({"_id": query.id}, {'$push': query.notes[0].dict()})
+    database["Incidents"].update_one({"_id": query.id}, {'$push': query.notes[0].dict(by_alias=True)})
 
 
 ## Responder Functions
@@ -57,7 +57,7 @@ def delete_category(cat: str):
 def record_weekly_on_call_schedule(schedule: OnCallWeekly):
     if schedule.cat is None:
         return
-    update = {k:v for k, v in schedule.dict().items() if v is not None}
+    update = {k:v for k, v in schedule.dict(by_alias=True).items() if v is not None}
     database["weekly_schedule"].update_one({"cat": schedule.cat}, update, upsert=True)
 
 def record_specific_on_call_schedule(schedule: OnCallSpecific):

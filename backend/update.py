@@ -35,9 +35,10 @@ def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
 
     assert len(schedule) <= 1
     if len(schedule) == 0:
-        raise HTTPException(status_code=404, detail='weekly schedule not found')
+        return None
+    #     raise HTTPException(status_code=404, detail='weekly schedule not found')
     
-    weekly_slot : WeeklySlot = getattr(schedule, day)
+    weekly_slot : WeeklySlot = getattr(schedule[0], day)
     
     if datetime.now().hour <= 15:
         responder = weekly_slot.Fn_id
@@ -53,15 +54,18 @@ def check_specific_oncall_schedule(incident: IncidentInfo):
     else:
         slot = "An"
     # specific_slot = SpecificSlot({'Date' : date.today(), 'Time': time})
-    specific_slot = SpecificSlot(Date = date.today(),Slot = slot)
+    specific_slot = SpecificSlot(Date = datetime.combine(date.today(), datetime.min.time()),Time= slot)
     # oncall_specific_query = OnCallSpecific({'cat' : incident.cat,'slot': specific_slot})
     oncall_specific_query = OnCallSpecific(cat = incident.cat,slot = specific_slot)
     schedule = search_specific_oncall_schedule(oncall_specific_query)
     assert len(schedule) <= 1
-    if len(schedule) == 0:
-        raise HTTPException(status_code=404, detail='specific schedule not found')
-        
-    return schedule.resp_id
+    # if len(schedule) == 0:
+    #     raise HTTPException(status_code=404, detail='specific schedule not found')
+    
+    if len(schedule) < 1:
+        return None
+    else:
+        return schedule[0]['resp_id']
 
 def update_incident(incident: IncidentInfo) -> None:
     '''_summary_
