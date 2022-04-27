@@ -28,7 +28,7 @@ def atleast_responder(request: Request) -> bool:
     if is_student(request):
         raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail='Not for students')
 
-def google_landing(request: Request, token) -> Response:
+def google_landing(token, request: Request) -> Response:
     from google.oauth2 import id_token
     from google.auth.transport import requests
     CLIENT_ID = '514647942452-4j1gla2p1ekgtje0utsthn3ebn17eaf5.apps.googleusercontent.com'

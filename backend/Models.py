@@ -90,3 +90,6 @@ class ResponderInfo(BaseModel, allow_population_by_field_name=True):
 class ResponderSummaryModel(ResponderInfo):
     num_open_incidents: int
     num_resolved_incidents: int
+
+class GoogleCredentialResponse(BaseModel):
+    credential: str # only this is required
