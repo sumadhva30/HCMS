@@ -141,3 +141,21 @@ async def sign_in(credential_response: GoogleCredentialResponse, request: Reques
 @app.post("/signout")
 async def sign_out(request: Request):
     return google_logout(request)
+
+@app.get("/user_type")
+async def user_type(request: Request):
+    STUDENT = 0
+    RESPONDER = 1
+    ADMIN = 2
+    LOGGEDOUT = 3
+    try:
+        if is_admin(request):
+            return ADMIN
+        elif is_responder(request):
+            return RESPONDER
+        else:
+            return STUDENT
+    except HTTPException as e:
+        if e.status_code == HTTPStatus.UNAUTHORIZED:
+            return LOGGEDOUT
+        raise
