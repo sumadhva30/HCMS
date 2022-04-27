@@ -9,7 +9,9 @@ database = client['HCMS_db']
 
 def get_student_info(std_id):
     collection = database['Student_info']
-    return collection.find({"_id" : std_id})
+    info =  collection.find({"_id" : std_id})
+    for inf in info:
+        return inf
 
 
 class PyObjectId(ObjectId):
