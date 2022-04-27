@@ -5,7 +5,7 @@ from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
 ## Incident Functions
 
 def insert_incident(incident: IncidentInfo):  # Assuming input is in the right format
-    database["Incidents"].insert_one(incident.dict(by_alias=True, exclude={'_id'}))
+    database["Incidents"].insert_one(incident.dict(exclude={'id'}))
 
 def set_update_incident(query: IncidentInfo) -> None:
     update_doc = {k: v for k, v in query.dict(by_alias=True).items() if v is not None}
@@ -22,7 +22,7 @@ def append_incident_notes(query: IncidentInfo) -> None:
 ## Responder Functions
 
 def insert_responder(responder: ResponderInfo):
-    database["Responder"].insert_one(responder)
+    database["Responder"].insert_one(responder.dict(exclude={'id'}))
 
 def update_responder(responder: ResponderInfo):
     if responder.name:
@@ -58,11 +58,11 @@ def record_weekly_on_call_schedule(schedule: OnCallWeekly):
     if schedule.cat is None:
         return
     update = {k:v for k, v in schedule.dict(by_alias=True).items() if v is not None}
-    database["weekly_schedule"].update_one({"cat": schedule.cat}, update, upsert=True)
+    database["weekly_schedule"].update_one({"cat": schedule.cat}, {"$set": update}, upsert=True)
 
 def record_specific_on_call_schedule(schedule: OnCallSpecific):
     if schedule.cat is None:
         return
     database["specific_schedule"].update_one({"slot": schedule["slot"], "cat": schedule["cat"]}, 
-    {"resp_id": schedule["resp_id"]}, upsert=True)
+    {"$set": {"resp_id": schedule["resp_id"]}}, upsert=True)
     pass
