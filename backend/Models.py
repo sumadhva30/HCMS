@@ -10,6 +10,7 @@ from dbaccess import PyObjectId
 class TicketInfo(BaseModel):
     id: str    # Student roll number
     cat: str   #Problem_category
+    sub: str   #Problem_title
     desc: str  #Problem_desc
 
 

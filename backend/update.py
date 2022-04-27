@@ -7,9 +7,12 @@ from search import *
 
 def assign_incident(incident: IncidentInfo):
     responder = check_specific_oncall_schedule(incident)
-    if len(responder) == 0:
+    if responder is None:
         responder = check_weekly_oncall_schedule(incident)
     incident.resp_id = responder
+    incident.assigned = False if responder is None else True
+    incident.resolved = False
+    incident.severity = 1  ## TODO: should be based on category
     insert_incident(incident)
 
     
