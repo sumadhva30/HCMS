@@ -1,7 +1,6 @@
 from datetime import datetime
 from datetime import date
-from Models import IncidentInfo
-from backend.Models import OnCallWeekly, WeeklySlot, OnCallSpecific, SpecificSlot
+from Models import *
 from fastapi import HTTPException
 from record import *
 from search import *

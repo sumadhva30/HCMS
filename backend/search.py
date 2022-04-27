@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import FastAPI
-from backend.Models import IncidentInfo, OnCallSpecific, OnCallWeekly, ResponderInfo, ResponderSummaryModel
+from Models import IncidentInfo, OnCallSpecific, OnCallWeekly, ResponderInfo, ResponderSummaryModel
 from dbaccess import database
 
 app = FastAPI()
