@@ -2,6 +2,8 @@ import copy
 from datetime import datetime
 from http import HTTPStatus
 import os
+import json
+from bson import json_util
 # from lib2to3.pgen2.token import OP
 from pydoc import resolve
 from typing import Optional
@@ -55,17 +57,17 @@ async def putTicketInfo(tkt : TicketInfo):
 async def putUpdateIncident(updatedIncident : IncidentInfo, request: Request):
     #Make sure user is admin.
     #Appropriate priveleges
-    student_cant_access = ["sub", "cat", "assigned", "severity", "resp_id", "std_info", "notes"]
-    responder_cant_access = ["sub", "cat", "assigned", "resp_id", "std_id", "notes"]
+    # student_cant_access = ["sub", "cat", "assigned", "severity", "resp_id", "std_info", "notes"]
+    # responder_cant_access = ["sub", "cat", "assigned", "resp_id", "std_id", "notes"]
 
-    if any([getattr(updatedIncident, k) is not None for k in student_cant_access]):
-        atleast_responder()
-    if any([getattr(updatedIncident, k) is not None for k in responder_cant_access]):
-        only_admin()
+    # if any([getattr(updatedIncident, k) is not None for k in student_cant_access]):
+    #     atleast_responder()
+    # if any([getattr(updatedIncident, k) is not None for k in responder_cant_access]):
+    #     only_admin()
     
-    if is_student(request) and my_email(request) != updatedIncident.std_info.id or \
-        is_responder(request) and my_email(request) != updatedIncident.resp_id:
-            raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="You do not have permission")
+    # if is_student(request) and my_email(request) != updatedIncident.std_info.id or \
+    #     is_responder(request) and my_email(request) != updatedIncident.resp_id:
+    #         raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="You do not have permission")
 
     update_incident(updatedIncident)
 
@@ -104,23 +106,24 @@ async def insertCategoryInfo(newCat : str):
 async def delCategoryInfo(delCat : str):
     delete_category(delCat)
 
-@app.get("/IncidentQuery")   #Cmon to all users
-async def getIncident(incidentQuery : IncidentInfo):
-    id = my_email()
-    student_cant_access = ["notes"]
-    if is_student(id):
-        if id != incidentQuery.std_info.id:
-            raise HTTPException(status_code=403, detail="You do not have permission")
-        for k in student_cant_access:
-            if IncidentInfo.dict()[k] is not None:
-                raise HTTPException(status_code=403, detail="You do not have permission")
+@app.post("/IncidentQuery")   #Cmon to all users
+async def getIncident(incidentQuery : IncidentInfo, response_model=List[IncidentInfo]):
+    # id = my_email()
+    # student_cant_access = ["notes"]
+    # if is_student(id):
+    #     if id != incidentQuery.std_info.id:
+    #         raise HTTPException(status_code=403, detail="You do not have permission")
+    #     for k in student_cant_access:
+    #         if IncidentInfo.dict()[k] is not None:
+    #             raise HTTPException(status_code=403, detail="You do not have permission")
     
-    if is_responder(id):
-        if id != incidentQuery.resp_id:
-            raise HTTPException(status_code=403, detail="You do not have permission")
+    # if is_responder(id):
+    #     if id != incidentQuery.resp_id:
+    #         raise HTTPException(status_code=403, detail="You do not have permission")
 
     incidents = search_incidents(incidentQuery)
-    return incidents
+    return json.loads(json_util.dumps(incidents))
+    # return incidents.dict(by_alias = True)
 
 @app.get("/admin/OnCallWeeklyQuery") 
 async def getOnCallWeekly(weeklySchedQuery: OnCallWeekly):
