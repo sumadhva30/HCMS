@@ -4,6 +4,7 @@ from Models import *
 from fastapi import HTTPException
 from record import *
 from search import *
+from dbaccess import all_admins
 
 def assign_incident(incident: IncidentInfo):
     responder = check_specific_oncall_schedule(incident)
@@ -12,8 +13,10 @@ def assign_incident(incident: IncidentInfo):
     incident.resp_id = responder
     incident.assigned = False if responder is None else True
     incident.resolved = False
-    incident.severity = 1  ## TODO: should be based on category
     insert_incident(incident)
+    if responder:
+        notif_receivers = [incident.std_info.id, responder]
+        notify_user(notif_receivers, f"New incident created and assigned: {incident.sub}", incident.msgs[0])
 
     
 def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
@@ -71,10 +74,26 @@ def update_incident(incident: IncidentInfo) -> None:
     ##TODO: if feedback says not resolved, reopen issue
     if incident.msgs != None:
         append_incident_msgs(incident)
+        notif_receivers = [incident.resp_id, incident.std_info.id]
+        notify_user(notif_receivers, f"New Incident Message: {incident.sub}", incident.msgs[0])
     elif incident.notes != None:
         append_incident_notes(incident)
+        notif_receivers = all_admins() + [incident.resp_id]
+        notify_user(notif_receivers, f"New Incident Note: {incident.sub}", incident.notes[0])
     else:
+        if incident.cat:
+            new_responder = check_specific_oncall_schedule(incident)
+            if new_responder is None:
+                new_responder = check_weekly_oncall_schedule(incident)
+            incident.resp_id = new_responder
         set_update_incident(incident)
+        notif_receivers = all_admins()
+        if incident.feedback:
+            notif_receivers.append(incident.std_info.id)
+        else:
+            notif_receivers = notif_receivers + [incident.std_info.id, incident.resp_id]
+        notify_user(notif_receivers, f"Incident Update: {incident.sub}", "Please open the HCMS portal to view update")
+
 
 def update_specific_oncall_schedule(oncall_specific: OnCallSpecific) -> None:
     return record_specific_on_call_schedule(oncall_specific)
