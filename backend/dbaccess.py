@@ -1,13 +1,16 @@
 from bson import ObjectId
 from typing import List, Optional
-import Models
 
 from pymongo import MongoClient
 
-from backend.Models import IncidentInfo, OnCallSpecific, OnCallWeekly, ResponderModel, ResponderSummaryModel
 client = MongoClient()
 
 database = client['HCMS_db']
+
+def get_student_info(std_id):
+    collection = database['Student_info']
+    return collection.find({"_id" : std_id})
+
 
 class PyObjectId(ObjectId):
     @classmethod

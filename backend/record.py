@@ -1,18 +1,18 @@
-from typing import Optional
-from fastapi import FastAPI
 from dbaccess import database
 
 from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
 
+## Incident Functions
+
 def insert_incident(incident: IncidentInfo):  # Assuming input is in the right format
-    return database["Incidents"].insert_one(incident)
+    database["Incidents"].insert_one(incident)
 
 def delete_incident(incident: IncidentInfo):
     database["Incidents"].delete_one({"_id": incident["_id"]})
 
 def set_update_incident(query: IncidentInfo) -> None:
-    update_doc = {k: v for k, v in query.dict().items() if k is not None}
-    database["Incident"].update_one({"_id": query.id}, update_doc)
+    update_doc = {k: v for k, v in query.dict().items() if v is not None}
+    database["Incident"].update_one({"_id": query.id}, {"$set": update_doc})
 
 def append_incident_msgs(query: IncidentInfo) -> None:
     # assume there is a singleton msg
@@ -25,20 +25,24 @@ def append_incident_notes(query: IncidentInfo) -> None:
         '$push': query.notes[0].dict()
     })
 
+
+## Responder Functions
+
 def insert_responder(responder: ResponderInfo):
-    return database["Responder"].insert_one(responder)
+    database["Responder"].insert_one(responder)
 
 def update_responder(responder: ResponderInfo):
     if responder.name:
         database["Responder"].update_one({"_id": responder["_id"]}, {"$set": {"name": responder.name}})
     if responder.category:
         database["Responder"].update_one({"_id": responder["_id"]}, {"$set": {"category": responder.category}})
-    return responder["_id"]
 
 def delete_responder(responder_id: str):
     database["Responder"].delete_one({"_id": responder_id})
     _ = database["Incidents"].update_many({"resp_id": responder_id, "resolved": False}, {"$set": {"resp_id": None, "assigned": False}})
 
+
+## Category Functions
 
 def insert_category(cat: str):
     database["Category"].update_one({}, {"$push": {"categories": cat}})
@@ -55,19 +59,16 @@ def delete_category(cat: str):
     database["Category"].update_one({}, {"$pull": {"categories": cat}})
 
 
+## On-Call-Schedule Functions
+
 def record_weekly_on_call_schedule(schedule: OnCallWeekly):
     if schedule.cat is None:
         return
-    cat_schedule = database["weekly_schedule"].find_one({"cat": schedule.cat})
-    for day, slot in vars(schedule):
-        if day in ("id", "cat"):
-            continue
-        if slot.Fn_id:
-            cat_schedule[day]["Fn"] = slot.Fn_id
-        if slot.An_id:
-            cat_schedule[day]["An"] = slot.An_id
-    
+    update = {k:v for k, v in schedule.dict().items() if v is not None}
+    database["weekly_schedule"].update_one({"cat": schedule.cat}, update, upsert=True)
 
 def record_specific_on_call_schedule(schedule: OnCallSpecific):
-    
+    if schedule.cat is None:
+        return
+    database["specific_schedule"].update_one({"slot": schedule["slot"], "cat": schedule["cat"]}, {"resp_id": schedule["resp_id"]}, upsert=True)
     pass

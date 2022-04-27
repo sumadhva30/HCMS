@@ -17,6 +17,17 @@ def is_admin(request: Request) -> bool:
 def is_responder(request: Request) -> bool:
     return 0 != database['Responders'].count_documents({'_id': my_email(request)})
 
+def is_student(request: Request) -> bool:
+    return not (is_admin(request) or is_responder(request))
+
+def only_admin(request: Request) -> bool:
+    if not is_admin(request):
+        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail='Not an admin')
+
+def atleast_responder(request: Request) -> bool:
+    if is_student(request):
+        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail='Not for students')
+
 def google_landing(request: Request, token) -> Response:
     from google.oauth2 import id_token
     from google.auth.transport import requests
