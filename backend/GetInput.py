@@ -11,7 +11,7 @@ from fastapi import FastAPI
 from typing import List, Optional
 from pydantic import BaseModel
 from pymongo import MongoClient
-from starlette import SessionMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from requests import get
 from Models import *
 from search import *

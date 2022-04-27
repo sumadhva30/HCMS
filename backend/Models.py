@@ -58,7 +58,7 @@ class WeeklySlot(BaseModel):
     An_id: Optional[str] = None
 
 class SpecificSlot(BaseModel):
-    Date: date
+    Date: datetime
     Time: str   #"An"/"Fn"
 
 class OnCallWeekly(BaseModel, allow_population_by_field_name=True):

@@ -1,6 +1,7 @@
 from http import HTTPStatus
 import sys
-from fastapi import HTTPException, Request, RedirectResponse, Response
+from fastapi import HTTPException, Request, Response
+from starlette.responses import RedirectResponse
 from dbaccess import database
 
 def my_email(request: Request) -> str:
