@@ -58,14 +58,14 @@ async def putUpdateIncident(updatedIncident : IncidentInfo, request: Request):
     student_cant_access = ["sub", "cat", "assigned", "severity", "resp_id", "std_info", "notes"]
     responder_cant_access = ["sub", "cat", "assigned", "resp_id", "std_id", "notes"]
 
-    if any([getattr(updatedIncident, k) is not None for k in student_cant_access]):
-        atleast_responder()
-    if any([getattr(updatedIncident, k) is not None for k in responder_cant_access]):
-        only_admin()
+    # if any([getattr(updatedIncident, k) is not None for k in student_cant_access]):
+    #     atleast_responder()
+    # if any([getattr(updatedIncident, k) is not None for k in responder_cant_access]):
+    #     only_admin()
     
-    if is_student(request) and my_email(request) != updatedIncident.std_info.id or \
-        is_responder(request) and my_email(request) != updatedIncident.resp_id:
-            raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="You do not have permission")
+    # if is_student(request) and my_email(request) != updatedIncident.std_info.id or \
+    #     is_responder(request) and my_email(request) != updatedIncident.resp_id:
+    #         raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="You do not have permission")
 
     update_incident(updatedIncident)
 

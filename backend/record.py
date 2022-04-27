@@ -5,6 +5,7 @@ from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
 ## Incident Functions
 
 def insert_incident(incident: IncidentInfo):  # Assuming input is in the right format
+    incident.severity = 1
     database["Incidents"].insert_one(incident.dict(exclude={'id'}))
 
 def set_update_incident(query: IncidentInfo) -> None:
@@ -13,10 +14,10 @@ def set_update_incident(query: IncidentInfo) -> None:
 
 def append_incident_msgs(query: IncidentInfo) -> None:
     # assume there is a singleton msg
-    database["Incidents"].update_one({"_id": query.id}, {'$push': query.msgs[0].dict(by_alias=True)}) 
+    database["Incidents"].update_one({"_id": query.id}, {'$push': {"msgs": query.msgs[0].dict(by_alias=True)}}) 
 
 def append_incident_notes(query: IncidentInfo) -> None:
-    database["Incidents"].update_one({"_id": query.id}, {'$push': query.notes[0].dict(by_alias=True)})
+    database["Incidents"].update_one({"_id": query.id}, {'$push': {"notes": query.notes[0].dict(by_alias=True)}})
 
 
 ## Responder Functions
