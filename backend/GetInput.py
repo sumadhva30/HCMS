@@ -32,7 +32,8 @@ def raiseTicket(TktInfo : TicketInfo):
     '''
     StdInfo = get_student_info(TktInfo.id)
     StdInfObj = StudentInfo(**StdInfo)
-    newIncident = IncidentInfo(sub=TktInfo.desc, cat=TktInfo.cat, std_info=StdInfObj)
+    initial_desc = IncidentMsgs(sender_id=TktInfo.id, msg=TktInfo.desc, timeStamp=datetime.now())
+    newIncident = IncidentInfo(sub=TktInfo.sub, cat=TktInfo.cat, std_info=StdInfObj, msgs=[initial_desc])
     assign_incident(newIncident)
 
 def is_admin(id: str):
