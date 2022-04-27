@@ -44,6 +44,5 @@ def search_specific_oncall_schedule(query: OnCallSpecific) -> List[OnCallSpecifi
     return database["specific_schedule"].find({search_options})
 
 def search_weekly_oncall_schedule(query: OnCallWeekly) -> List[OnCallWeekly]:
-    ## TODO    
-    pass
+    return database["weekly_schedule"].find({"cat": query.cat})
 
