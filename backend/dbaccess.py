@@ -19,7 +19,7 @@ def all_admins():
 
 def get_categories():
     cursor = database["Category"].find()
-    return (cat for cat in cursor)
+    return cursor.next()["categories"]
 
 def stripNone(data):
     if isinstance(data, dict):

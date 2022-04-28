@@ -40,7 +40,12 @@ function App() {
         <Navbar backendURL={backendURL} userType={userType}/>
         <Routes>
           <Route index element={<HomePage userType={userType} backendURL={backendURL} setUserType = {setUserType}/>}/>
-          <Route path="/new-ticket" element={<NewTicketPage backendURL={backendURL} categories={categories}/>} />
+          <Route path="/new-ticket" element={
+            <NewTicketPage 
+              backendURL={backendURL}
+              categories={categories}
+              email={email}
+            />} />
           <Route path="/view-incidents" element={<ViewIncidentsPage/>} />
           {/*... etc ...*/}
         </Routes>
