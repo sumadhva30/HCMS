@@ -16,7 +16,13 @@ function App() {
   // const [isLoggedIn, setIsLoggedIn] = useState(document.cookie.match(/^(.*;)?\s*session\s*=\s*[^;]+(.*)?$/));
   const [email, setEmail] = useState('');
   const [userType, setUserType] = useState(LOGGEDOUT);
-
+  const [categories, setCategories] = useState([]);
+  const fetchCategories = () => {
+    fetch(`${backendURL}/viewCategories`, {credentials: 'include'})
+      .then((res) => res.json())
+      .then((res) => setCategories(res))
+  };
+  useEffect(fetchCategories, [userType]);
   const backendURL = "http://localhost:8000";
 
   useEffect(() => {
@@ -46,7 +52,6 @@ function App() {
 function HomePage(props) {
   const userType = props.userType;
   const backendURL = props.backendURL;
-  const setUserType = props.setUserType;
 
   switch(userType) {
     case STUDENT: return <StudentHome />;
