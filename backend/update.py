@@ -5,7 +5,7 @@ from Models import *
 from fastapi import HTTPException
 from record import *
 from search import *
-from dbaccess import all_admins
+from dbaccess import all_admins, get_student_id, get_responder_id
 from notify import notify_user
 
 def assign_incident(incident: IncidentInfo):
@@ -16,9 +16,9 @@ def assign_incident(incident: IncidentInfo):
     incident.assigned = False if responder is None else True
     incident.resolved = False
     incident.notes = []
-    std_id = insert_incident(incident)
+    insert_incident(incident)
     if responder:
-        notif_receivers = [std_id, responder]
+        notif_receivers = [incident.std_info.id, responder]
         notify_user(notif_receivers, f"New incident created and assigned: {incident.sub}", incident.msgs[0])
 
     
@@ -81,11 +81,12 @@ def update_incident(incident: IncidentInfo) -> None:
     '''
     ##TODO: if feedback says not resolved, reopen issue
     if incident.msgs != None:
-        notif_receivers = append_incident_msgs(incident)
+        append_incident_msgs(incident)
+        notif_receivers = [get_student_id(incident.id), get_responder_id(incident.id)]
         notify_user(notif_receivers, f"New Incident Message: {incident.sub}", incident.msgs[0])
     elif incident.notes != None:
-        resp_id = append_incident_notes(incident)
-        notif_receivers = all_admins() + [resp_id]
+        append_incident_notes(incident)
+        notif_receivers = all_admins() + [get_responder_id(incident.id)]
         notify_user(notif_receivers, f"New Incident Note: {incident.sub}", incident.notes[0])
     else:
         if incident.cat:
@@ -93,10 +94,10 @@ def update_incident(incident: IncidentInfo) -> None:
             if new_responder is None:
                 new_responder = check_weekly_oncall_schedule(incident)
             incident.resp_id = new_responder
-        std_id, resp_id = set_update_incident(incident)
-        notif_receivers = all_admins() + [std_id]
+        set_update_incident(incident)
+        notif_receivers = all_admins() + [get_student_id(incident.id)]
         if not incident.feedback:
-            notif_receivers.append(resp_id)
+            notif_receivers.append(get_responder_id(incident.id))
         notify_user(notif_receivers, f"Incident Update: {incident.sub}", "Please open the HCMS portal to view update")
 
 

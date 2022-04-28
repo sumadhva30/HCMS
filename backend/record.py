@@ -7,23 +7,17 @@ from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
 def insert_incident(incident: IncidentInfo):  # Assuming input is in the right format
     incident.severity = 1
     database["Incidents"].insert_one(incident.dict(exclude={'id'}))
-    return incident.std_info.id
 
 def set_update_incident(query: IncidentInfo) -> None:
     update_doc = {k: v for k, v in query.dict(by_alias=True).items() if v is not None}
     database["Incidents"].update_one({"_id": query.id}, {"$set": update_doc})
-    inc = database["Incidents"].find_one({"_id": query.id})
-    return [inc["std_info"]["id"], inc["resp_id"]]
 
 def append_incident_msgs(query: IncidentInfo) -> None:
     # assume there is a singleton msg
     database["Incidents"].update_one({"_id": query.id}, {'$push': {"msgs": query.msgs[0].dict(by_alias=True)}}) 
-    inc = database["Incidents"].find_one({"_id": query.id})
-    return [inc["std_info"]["id"], inc["resp_id"]]
 
 def append_incident_notes(query: IncidentInfo) -> None:
     database["Incidents"].update_one({"_id": query.id}, {'$push': {"notes": query.notes[0].dict(by_alias=True)}})
-    return database["Incidents"].find_one({"_id": query.id})["resp_id"]
 
 
 ## Responder Functions

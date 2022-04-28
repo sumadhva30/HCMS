@@ -16,13 +16,12 @@ def all_admins():
     cursor = database["Admins"].find()
     return [admin["email"] for admin in cursor]
 
-def get_student_id(incident):
-    print(vars(incident))
-    inc = database["Incidents"].find_one({"_id": incident.id})
+def get_student_id(incident_id):
+    inc = database["Incidents"].find_one({"_id": incident_id})
     return inc["std_info"]["id"]
 
-def get_responder_id(incident):
-    inc = database["Incidents"].find_one({"_id": incident.id})
+def get_responder_id(incident_id):
+    inc = database["Incidents"].find_one({"_id": incident_id})
     return inc["resp_id"]
 
 class PyObjectId(ObjectId):
