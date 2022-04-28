@@ -9,7 +9,7 @@ from pydoc import resolve
 from typing import Optional
 from email.iterators import body_line_iterator
 from urllib.request import Request
-from fastapi import FastAPI
+from fastapi import FastAPI, Form
 from typing import List, Optional
 from pydantic import BaseModel
 from pymongo import MongoClient
@@ -36,15 +36,6 @@ def raiseTicket(TktInfo : TicketInfo):
     initial_desc = IncidentMsgs(sender_id=TktInfo.id, msg=TktInfo.desc, timeStamp=datetime.now())
     newIncident = IncidentInfo(sub=TktInfo.sub, cat=TktInfo.cat, std_info=StdInfObj, msgs=[initial_desc])
     assign_incident(newIncident)
-
-def is_admin(id: str):
-    pass
-
-def is_responder(id: str):
-    pass
-
-def is_student(id: str):
-    pass
 
 
 ###--------API Endpints--------###
@@ -138,27 +129,27 @@ async def getOncallSpecific(specificSchedQuery: OnCallSpecific):
 
 
 @app.post("/gsignin")
-async def sign_in(credential_response: GoogleCredentialResponse, request: Request):
-    return google_landing(credential_response.credential, request)
+async def sign_in(request: Request, credential: str = Form(...)):
+    return google_landing(credential, request)
 
 @app.post("/signout")
 async def sign_out(request: Request):
     return google_logout(request)
 
 @app.get("/user_type")
-async def user_type(request: Request):
+async def user_type(request: Request, response_model=UserTypeResponseModel):
     STUDENT = 0
     RESPONDER = 1
     ADMIN = 2
     LOGGEDOUT = 3
     try:
+        res = UserTypeResponseModel(email=my_email(request), user_type=STUDENT)
         if is_admin(request):
-            return ADMIN
+            res.user_type = ADMIN
         elif is_responder(request):
-            return RESPONDER
-        else:
-            return STUDENT
+            res.user_type = RESPONDER
+        return res
     except HTTPException as e:
         if e.status_code == HTTPStatus.UNAUTHORIZED:
-            return LOGGEDOUT
+            return UserTypeResponseModel(email='', user_type=LOGGEDOUT)
         raise
