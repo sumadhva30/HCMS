@@ -132,7 +132,7 @@ async def getOncallSpecific(specificSchedQuery: OnCallSpecific):
 async def sign_in(request: Request, credential: str = Form(...)):
     return google_landing(credential, request)
 
-@app.post("/signout")
+@app.get("/signout")
 async def sign_out(request: Request):
     return google_logout(request)
 

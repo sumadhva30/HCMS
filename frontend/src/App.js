@@ -7,8 +7,9 @@ import LoginPage from "./Pages/LoginPage";
 import StudentHome from "./Pages/StudentHome";
 import ResponderHome from './Pages/ResponderHome';
 import AdminHome from './Pages/AdminHome';
+import Navbar from './Components/NavBar';
 
-const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
+export const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
 
 
 function App() {
@@ -29,14 +30,8 @@ function App() {
   console.log(userType, email);
   return (
     <div className="App">
-        {/*TODO NavPage later ({
-              LOGGEDOUT: <LoggedOutNav />,
-              STUDENT: <StudentNav />,
-              RESPONDER: <ResponderNav />,
-              ADMIN: <AdminNav />
-          })[userType] }*/
-        }
       <BrowserRouter>
+        <Navbar backendURL={backendURL} userType={userType}/>
         <Routes>
           <Route index element={<HomePage userType={userType} backendURL={backendURL} setUserType = {setUserType}/>}/>
           <Route path="/new-ticket" element={<NewTicketPage/>} />
