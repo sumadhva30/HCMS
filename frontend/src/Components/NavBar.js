@@ -15,7 +15,7 @@ function Logout(props) {
   const userType = props.userType;
   const backendURL = props.backendURL;
 
-  if(userType != LOGGEDOUT)
+  if(userType !== LOGGEDOUT)
     return <Button variant="outlined" href={`${backendURL}/signout`}>Logout</Button>;
   return null;
 }

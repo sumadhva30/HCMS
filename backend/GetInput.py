@@ -14,6 +14,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 from pymongo import MongoClient
 from starlette.middleware.sessions import SessionMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from requests import get
 from Models import *
 from search import *
@@ -23,9 +24,12 @@ from dbaccess import get_student_info
 from auth import *
 
 secret_key = os.environ['SESSION_SECRET']
+origins = ['http://localhost', 'http://localhost:3000', 'http://localhost:8000']
 
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key=secret_key)
+app.add_middleware(CORSMiddleware, allow_origins=origins,
+    allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
 
 def raiseTicket(TktInfo : TicketInfo):
     '''Function to raise a ticket after taking required student info.
@@ -151,6 +155,5 @@ async def user_type(request: Request):#, response_model=UserTypeResponseModel):
         return res
     except HTTPException as e:
         if e.status_code == HTTPStatus.UNAUTHORIZED:
-            return LOGGEDOUT
-            # return UserTypeResponseModel(email='', user_type=LOGGEDOUT)
+            return UserTypeResponseModel(email='', user_type=LOGGEDOUT)
         raise
