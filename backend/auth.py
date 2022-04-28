@@ -44,7 +44,7 @@ def google_landing(token, request: Request) -> Response:
             raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail='Sign in with IITH email.')
 
         request.session['email'] = email
-        return RedirectResponse('/signedin')
+        return RedirectResponse('http://localhost:3000/', status_code=HTTPStatus.FOUND)
     
     except ValueError:
         print(idinfo, file=sys.stderr)
@@ -52,4 +52,4 @@ def google_landing(token, request: Request) -> Response:
 
 def google_logout(request: Request) -> Response:
     request.session.pop('email', None)
-    return RedirectResponse('/notsignedin')
+    return RedirectResponse('http://localhost:3000/', status_code=HTTPStatus.FOUND)

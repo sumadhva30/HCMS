@@ -16,10 +16,10 @@ def assign_incident(incident: IncidentInfo):
     incident.assigned = False if responder is None else True
     incident.resolved = False
     incident.notes = []
-    insert_incident(incident)
-    # if responder:
-    #     notif_receivers = [incident.std_info.id, responder]
-    #     notify_user(notif_receivers, f"New incident created and assigned: {incident.sub}", incident.msgs[0])
+    std_id = insert_incident(incident)
+    if responder:
+        notif_receivers = [std_id, responder]
+        notify_user(notif_receivers, f"New incident created and assigned: {incident.sub}", incident.msgs[0])
 
     
 def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
@@ -35,8 +35,6 @@ def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
     schedule = search_weekly_oncall_schedule(oncall_weekly_query)
     WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
     day = WEEKDAYS[datetime.now().weekday()]
-
-    print(len(schedule))
 
     assert len(schedule) <= 1
     if len(schedule) == 0:
@@ -83,24 +81,23 @@ def update_incident(incident: IncidentInfo) -> None:
     '''
     ##TODO: if feedback says not resolved, reopen issue
     if incident.msgs != None:
-        append_incident_msgs(incident)
-        # notif_receivers = [incident.resp_id, incident.std_info.id]
-        # notify_user(notif_receivers, f"New Incident Message: {incident.sub}", incident.msgs[0])
+        notif_receivers = append_incident_msgs(incident)
+        notify_user(notif_receivers, f"New Incident Message: {incident.sub}", incident.msgs[0])
     elif incident.notes != None:
-        append_incident_notes(incident)
-        # notif_receivers = all_admins() + [incident.resp_id]
-        # notify_user(notif_receivers, f"New Incident Note: {incident.sub}", incident.notes[0])
+        resp_id = append_incident_notes(incident)
+        notif_receivers = all_admins() + [resp_id]
+        notify_user(notif_receivers, f"New Incident Note: {incident.sub}", incident.notes[0])
     else:
         if incident.cat:
             new_responder = check_specific_oncall_schedule(incident)
             if new_responder is None:
                 new_responder = check_weekly_oncall_schedule(incident)
             incident.resp_id = new_responder
-        set_update_incident(incident)
-        # notif_receivers = all_admins() + [incident.std_info.id]
-        # if not incident.feedback:
-        #     notif_receivers.append(incident.resp_id)
-        # notify_user(notif_receivers, f"Incident Update: {incident.sub}", "Please open the HCMS portal to view update")
+        std_id, resp_id = set_update_incident(incident)
+        notif_receivers = all_admins() + [std_id]
+        if not incident.feedback:
+            notif_receivers.append(resp_id)
+        notify_user(notif_receivers, f"Incident Update: {incident.sub}", "Please open the HCMS portal to view update")
 
 
 def update_specific_oncall_schedule(oncall_specific: OnCallSpecific) -> None:
