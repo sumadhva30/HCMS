@@ -41,7 +41,7 @@ function App() {
         {/* <ViewIncidentsPage/> */}
         <Routes>
           <Route index element={<HomePage userType={userType} backendURL={backendURL} setUserType = {setUserType}/>}/>
-          <Route path="/new-ticket" element={<NewTicketPage/>} />
+          <Route path="/new-ticket" element={<NewTicketPage backendURL={backendURL} categories={categories}/>} />
           <Route path="/view-incidents" element={<ViewIncidentsPage/>} />
           {/*... etc ...*/}
         </Routes>
