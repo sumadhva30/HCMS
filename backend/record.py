@@ -34,7 +34,7 @@ def update_responder(responder: ResponderInfo):
 
 def delete_responder(responder_id: str):
     database["Responder"].delete_one({"_id": responder_id})
-    _ = database["Incidents"].update_many({"resp_id": responder_id, "resolved": False}, {"$set": {"resp_id": None, "assigned": False}})
+    database["Incidents"].update_many({"resp_id": responder_id, "resolved": False}, {"$set": {"resp_id": None, "assigned": False}})
 
 
 ## Category Functions

@@ -9,9 +9,8 @@ database = client['HCMS_db']
 
 def get_student_info(std_id):
     collection = database['Student_Info']
-    info =  collection.find({"_id" : std_id})
-    for inf in info:
-        return inf
+    info =  collection.find_one({"_id" : std_id})
+    return info
 
 def all_admins():
     cursor = database["Admins"].find()
@@ -28,6 +27,13 @@ def stripNone(data):
         return {stripNone(item) for item in data if item is not None}
     else:
         return data
+def get_student_id(incident_id):
+    inc = database["Incidents"].find_one({"_id": incident_id})
+    return inc["std_info"]["id"]
+
+def get_responder_id(incident_id):
+    inc = database["Incidents"].find_one({"_id": incident_id})
+    return inc["resp_id"]
 
 class PyObjectId(ObjectId):
     @classmethod
