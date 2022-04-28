@@ -137,7 +137,7 @@ async def sign_out(request: Request):
     return google_logout(request)
 
 @app.get("/user_type")
-async def user_type(request: Request, response_model=UserTypeResponseModel):
+async def user_type(request: Request):#, response_model=UserTypeResponseModel):
     STUDENT = 0
     RESPONDER = 1
     ADMIN = 2
@@ -151,5 +151,6 @@ async def user_type(request: Request, response_model=UserTypeResponseModel):
         return res
     except HTTPException as e:
         if e.status_code == HTTPStatus.UNAUTHORIZED:
-            return UserTypeResponseModel(email='', user_type=LOGGEDOUT)
+            return LOGGEDOUT
+            # return UserTypeResponseModel(email='', user_type=LOGGEDOUT)
         raise
