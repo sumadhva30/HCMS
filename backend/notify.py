@@ -2,8 +2,8 @@ import os
 import smtplib
 
 def notify_user(rec, sub: str, body: str):
-    EMAIL_ADDRESS = "vamshi.test1234@gmail.com"
-    EMAIL_PASSWORD = "gxpokrpfarbvhugw"
+    EMAIL_ADDRESS = os.environ['EMAIL_ADDRESS']
+    EMAIL_PASSWORD = os.environ['EMAIL_PASSWORD']
 
     with smtplib.SMTP('smtp.gmail.com',587) as smtp:
         smtp.ehlo()
