@@ -1,5 +1,6 @@
 from bson import ObjectId
 from typing import List, Optional
+from colorama import Cursor
 
 from pymongo import MongoClient
 
@@ -15,6 +16,10 @@ def get_student_info(std_id):
 def all_admins():
     cursor = database["Admins"].find()
     return [admin["email"] for admin in cursor]
+
+def get_categories():
+    cursor = database["Category"].find()
+    return (cat for cat in cursor)
 
 def stripNone(data):
     if isinstance(data, dict):

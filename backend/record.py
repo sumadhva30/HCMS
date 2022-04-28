@@ -24,13 +24,13 @@ def append_incident_notes(query: IncidentInfo) -> None:
 ## Responder Functions
 
 def insert_responder(responder: ResponderInfo):
-    database["Responder"].insert_one(responder.dict(exclude={'id'}))
+    database["Responder"].insert_one(responder.dict(by_alias=True))
 
 def update_responder(responder: ResponderInfo):
     if responder.name:
-        database["Responder"].update_one({"_id": responder["_id"]}, {"$set": {"name": responder.name}})
+        database["Responder"].update_one({"_id": responder.id}, {"$set": {"name": responder.name}})
     if responder.category:
-        database["Responder"].update_one({"_id": responder["_id"]}, {"$set": {"category": responder.category}})
+        database["Responder"].update_one({"_id": responder.id}, {"$set": {"category": responder.category}})
 
 def delete_responder(responder_id: str):
     database["Responder"].delete_one({"_id": responder_id})
@@ -67,4 +67,3 @@ def record_specific_on_call_schedule(schedule: OnCallSpecific):
         return
     database["specific_schedule"].update_one({"slot": schedule.slot.dict(), "cat": schedule.cat}, 
     {"$set": {"resp_id": schedule.resp_id}}, upsert=True)
-    pass

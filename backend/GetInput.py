@@ -19,7 +19,7 @@ from Models import *
 from search import *
 from record import *
 from update import *
-from dbaccess import get_student_info
+from dbaccess import get_categories, get_student_info
 from auth import *
 
 secret_key = os.environ['SESSION_SECRET']
@@ -85,6 +85,10 @@ async def updateResponderInfo(updateResp : ResponderInfo):
 async def delResponderInfo(respId: str):
     delete_responder(respId)
 
+@app.get("/viewCategories")
+async def viewCategories():
+    return json.loads(json_util.dumps(get_categories()))
+
 @app.put("/admin/updateCategoryInfo") 
 async def updateCategoryInfo(oldCatName : str, newCatName : str):
     update_category(oldCatName, newCatName)
@@ -98,34 +102,29 @@ async def delCategoryInfo(delCat : str):
     delete_category(delCat)
 
 @app.post("/IncidentQuery")   #Cmon to all users
-async def getIncident(incidentQuery : IncidentInfo):
-    # id = my_email()
-    # student_cant_access = ["notes"]
-    # if is_student(id):
-    #     if id != incidentQuery.std_info.id:
-    #         raise HTTPException(status_code=403, detail="You do not have permission")
-    #     for k in student_cant_access:
-    #         if IncidentInfo.dict()[k] is not None:
-    #             raise HTTPException(status_code=403, detail="You do not have permission")
-    
-    # if is_responder(id):
-    #     if id != incidentQuery.resp_id:
-    #         raise HTTPException(status_code=403, detail="You do not have permission")
+async def getIncident(incidentQuery : IncidentInfo, request: Request):
 
+    # student_cant_access = ["notes"]
+    # if any([getattr(incidentQuery, k) is not None for k in student_cant_access]):
+    #     atleast_responder()
+    # if is_student(request) and my_email(request) != incidentQuery.std_info.id or \
+    #     is_responder(request) and my_email(request) != incidentQuery.resp_id:
+    #         raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="You do not have permission")
+    
     incidents = search_incidents(incidentQuery)
     return json.loads(json_util.dumps(incidents))
-    # return incidents.dict(by_alias = True)
 
-@app.get("/admin/OnCallWeeklyQuery") 
+@app.post("/admin/OnCallWeeklyQuery") 
 async def getOnCallWeekly(weeklySchedQuery: OnCallWeekly):
-    pass
+    onCallList = search_weekly_oncall_schedule(weeklySchedQuery)
+    return json.loads(json_util.dumps(onCallList))
     #Calls OnCallWeekly
 
 
-@app.get("/admin/OnCallSpecificQuery") 
+@app.post("/admin/OnCallSpecificQuery") 
 async def getOncallSpecific(specificSchedQuery: OnCallSpecific):
     onCallList = search_specific_oncall_schedule(specificSchedQuery)
-    return onCallList
+    return json.loads(json_util.dumps(onCallList))
 
 
 @app.post("/gsignin")
