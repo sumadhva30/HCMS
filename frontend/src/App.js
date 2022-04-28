@@ -38,6 +38,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Navbar backendURL={backendURL} userType={userType}/>
+        {/* <ViewIncidentsPage/> */}
         <Routes>
           <Route index element={<HomePage userType={userType} backendURL={backendURL} setUserType = {setUserType}/>}/>
           <Route path="/new-ticket" element={<NewTicketPage/>} />
