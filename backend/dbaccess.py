@@ -17,6 +17,17 @@ def all_admins():
     cursor = database["Admins"].find()
     return [admin["email"] for admin in cursor]
 
+def stripNone(data):
+    if isinstance(data, dict):
+        return {k:stripNone(v) for k, v in data.items() if k is not None and v is not None}
+    elif isinstance(data, list):
+        return [stripNone(item) for item in data if item is not None]
+    elif isinstance(data, tuple):
+        return tuple(stripNone(item) for item in data if item is not None)
+    elif isinstance(data, set):
+        return {stripNone(item) for item in data if item is not None}
+    else:
+        return data
 
 class PyObjectId(ObjectId):
     @classmethod

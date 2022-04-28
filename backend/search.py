@@ -18,9 +18,6 @@ def search_incidents(query: IncidentInfo) -> List[IncidentInfo]:
             query_doc['$text'] = {'$search':v}
     print(query_doc)
     cursor = database["Incidents"].find(query_doc)
-    print(cursor)
-    print(cursor[:100])
-    print(list(cursor[:100]))
     return list(database["Incidents"].find(query_doc)[:100]) # todo paging
 
 def search_responders(query: ResponderInfo) -> List[ResponderSummaryModel]:

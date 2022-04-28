@@ -96,10 +96,11 @@ def update_incident(incident: IncidentInfo) -> None:
                 new_responder = check_weekly_oncall_schedule(incident)
             incident.resp_id = new_responder
         set_update_incident(incident)
-        notif_receivers = all_admins() + incident.std_info.id
-        if not incident.feedback:
-            notif_receivers.append(incident.resp_id)
-        notify_user(notif_receivers, f"Incident Update: {incident.sub}", "Please open the HCMS portal to view update")
+    
+        # notif_receivers = all_admins() + incident.std_info.id
+        # if not incident.feedback:
+        #     notif_receivers.append(incident.resp_id)
+        # notify_user(notif_receivers, f"Incident Update: {incident.sub}", "Please open the HCMS portal to view update")
 
 
 def update_specific_oncall_schedule(oncall_specific: OnCallSpecific) -> None:

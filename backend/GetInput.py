@@ -37,15 +37,6 @@ def raiseTicket(TktInfo : TicketInfo):
     newIncident = IncidentInfo(sub=TktInfo.sub, cat=TktInfo.cat, std_info=StdInfObj, msgs=[initial_desc])
     assign_incident(newIncident)
 
-def is_admin(id: str):
-    pass
-
-def is_responder(id: str):
-    pass
-
-def is_student(id: str):
-    pass
-
 
 ###--------API Endpints--------###
 
@@ -107,7 +98,7 @@ async def delCategoryInfo(delCat : str):
     delete_category(delCat)
 
 @app.post("/IncidentQuery")   #Cmon to all users
-async def getIncident(incidentQuery : IncidentInfo, response_model=List[IncidentInfo]):
+async def getIncident(incidentQuery : IncidentInfo):
     # id = my_email()
     # student_cant_access = ["notes"]
     # if is_student(id):

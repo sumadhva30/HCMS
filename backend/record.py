@@ -1,4 +1,5 @@
-from dbaccess import database
+from dbaccess import database, stripNone
+from flatten_dict import flatten
 
 from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
 
@@ -9,7 +10,7 @@ def insert_incident(incident: IncidentInfo):  # Assuming input is in the right f
     database["Incidents"].insert_one(incident.dict(exclude={'id'}))
 
 def set_update_incident(query: IncidentInfo) -> None:
-    update_doc = {k: v for k, v in query.dict(by_alias=True).items() if v is not None}
+    update_doc = flatten(stripNone(query.dict(by_alias=True)), reducer='dot')
     database["Incidents"].update_one({"_id": query.id}, {"$set": update_doc})
 
 def append_incident_msgs(query: IncidentInfo) -> None:
@@ -58,12 +59,12 @@ def delete_category(cat: str):
 def record_weekly_on_call_schedule(schedule: OnCallWeekly):
     if schedule.cat is None:
         return
-    update = {k:v for k, v in schedule.dict(by_alias=True).items() if v is not None}
+    update = flatten(stripNone(schedule.dict(by_alias=True)), reducer='dot')
     database["weekly_schedule"].update_one({"cat": schedule.cat}, {"$set": update}, upsert=True)
 
 def record_specific_on_call_schedule(schedule: OnCallSpecific):
     if schedule.cat is None:
         return
-    database["specific_schedule"].update_one({"slot": schedule["slot"], "cat": schedule["cat"]}, 
-    {"$set": {"resp_id": schedule["resp_id"]}}, upsert=True)
+    database["specific_schedule"].update_one({"slot": schedule.slot.dict(), "cat": schedule.cat}, 
+    {"$set": {"resp_id": schedule.resp_id}}, upsert=True)
     pass
