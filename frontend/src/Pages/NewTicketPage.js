@@ -6,10 +6,12 @@ function NewTicketPage(props) {
   const categories = props.categories;
   const backendURL = props.backendURL;
   const email = props.email;
+  const toast = props.toast;
   let navigate = useNavigate();
   const [subject, setSubject] = useState('');
   const [category, setCategory] = useState('');
   const [message, setMessage] = useState('');
+  
 
   const raiseTicket = (e) => {
     fetch(`${backendURL}/student/raiseticket`, {
@@ -24,6 +26,7 @@ function NewTicketPage(props) {
       })
     }).then((res) => {
       if (res.ok) {
+        toast("success", "Ticket raised!");
         navigate("/");
       }
     });

@@ -8,6 +8,7 @@ import StudentHome from "./Pages/StudentHome";
 import ResponderHome from './Pages/ResponderHome';
 import AdminHome from './Pages/AdminHome';
 import Navbar from './Components/NavBar';
+import CustomizedSnackbars from './Components/CustomSnackBar';
 
 export const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
 
@@ -24,6 +25,9 @@ function App() {
   };
   useEffect(fetchCategories, [userType]);
   const backendURL = "http://localhost:8000";
+  // Snackbar
+  const [snackbarProps, setSnackBarProps] = useState({open: false, severity: 'success', message: 'Done!'});
+  const toast = (severity, message) => setSnackBarProps({open: true, severity: severity, message: message});
 
   useEffect(() => {
     fetch(`${backendURL}/user_type`, {credentials: 'include'})
@@ -46,10 +50,12 @@ function App() {
               backendURL={backendURL}
               categories={categories}
               email={email}
+              toast={toast}
             />} />
           <Route path="/view-incidents" element={<ViewIncidentsPage/>} />
           {/*... etc ...*/}
         </Routes>
+        <CustomizedSnackbars settings={snackbarProps} setProps={setSnackBarProps} />
       </BrowserRouter>
     </div>
   );
