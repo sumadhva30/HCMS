@@ -7,7 +7,7 @@ from Models import IncidentInfo, ResponderInfo, OnCallWeekly, OnCallSpecific
 
 def insert_incident(incident: IncidentInfo):  # Assuming input is in the right format
     incident.severity = 1
-    database["Incidents"].insert_one(incident.dict(exclude={'id'}))
+    database["Incidents"].insert_one(incident.dict(by_alias=True, exclude={'id'}))
 
 def set_update_incident(query: IncidentInfo) -> None:
     update_doc = flatten(stripNone(query.dict(by_alias=True)), reducer='dot')

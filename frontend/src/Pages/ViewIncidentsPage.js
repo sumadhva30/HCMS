@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { Select, MenuItem, Stack} from "@mui/material";
 import { InputLabel, TextField} from "@mui/material";
 import { Container } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { Link } from "@mui/material";
 import { Button } from "@mui/material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
@@ -49,7 +50,7 @@ function ViewIncidentsPage(props) {
         sub: incidentSub,
         resolved: incidentRes,
         std_info: {
-          id: stuEmail
+          _id: stuEmail
         },
         resp_id: respEmail 
       })
@@ -71,6 +72,11 @@ function ViewIncidentsPage(props) {
     else
       setIncidentSub(e.target.value);
   }
+   
+  let navigate = useNavigate(); 
+  const routeChange = (incident) =>{  
+    navigate('/view-oncall');
+  }
 
   return (
     <Container maxWidth='xl' >
@@ -85,6 +91,7 @@ function ViewIncidentsPage(props) {
         >
           <MenuItem value={'true'} >Yes</MenuItem>
           <MenuItem value={'false'}>No</MenuItem>
+          <MenuItem value={null}>All</MenuItem>
       </Select>
       <Select
           label="Category"
@@ -94,7 +101,7 @@ function ViewIncidentsPage(props) {
           { categories.map((category) => (
             <MenuItem value={category} key={category}>{category}</MenuItem>
           ))}
-          {/* <MenuItem value = {null} key={null}> None</MenuItem> */}
+          <MenuItem value = {null}> All</MenuItem>
       </Select>
       <TextField
           label="Subject"
@@ -121,11 +128,13 @@ function ViewIncidentsPage(props) {
            <TableRow
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
+             <TableCell align="left" scope="row">
               <Link to="/view-oncall">
-                <Button>
-                <TableCell align="left" component="th" scope="row">{incident.sub}</TableCell>
+                <Button onClick={routeChange}>
+                  {incident.sub}
                 </Button>
               </Link> 
+              </TableCell>
               <TableCell align="right">{incident.resolved ? 'resolved' : 'not resolved'}</TableCell>
               <TableCell align="right">{incident.assigned ? 'assigned' : 'not assigned'}</TableCell>
               <TableCell align="right">{incident.cat}</TableCell>
@@ -138,7 +147,5 @@ function ViewIncidentsPage(props) {
     </TableContainer>
   </Container>
   );
-  
-}
-
+};
 export default ViewIncidentsPage;
