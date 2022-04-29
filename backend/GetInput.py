@@ -36,7 +36,8 @@ def raiseTicket(TktInfo : TicketInfo):
        Return value is nothing but 'Incident Info'
     '''
     StdInfo = get_student_info(TktInfo.id)
-    StdInfObj = StudentInfo(**StdInfo)
+    StdInfObj = StudentInfo(**StdInfo, by_alias = True)
+    print(StdInfObj)
     initial_desc = IncidentMsgs(sender_id=TktInfo.id, msg=TktInfo.desc, timeStamp=datetime.now())
     newIncident = IncidentInfo(sub=TktInfo.sub, cat=TktInfo.cat, std_info=StdInfObj, msgs=[initial_desc])
     assign_incident(newIncident)

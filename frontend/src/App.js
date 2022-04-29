@@ -47,7 +47,13 @@ function App() {
               categories={categories}
               email={email}
             />} />
-          <Route path="/view-incidents" element={<ViewIncidentsPage/>} />
+          <Route path="/view-incidents" element={
+            <ViewIncidentsPage 
+              backendURL={backendURL} 
+              userType={userType}
+              categories={categories}
+              email = {email}
+            />} />
           {/*... etc ...*/}
         </Routes>
       </BrowserRouter>

@@ -1,64 +1,133 @@
 import React, {useState, useEffect} from "react";
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
+import { Select, MenuItem, Stack} from "@mui/material";
+import { InputLabel, TextField} from "@mui/material";
 import { Container } from "@mui/material";
+import { Link } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
+import { FormControl } from "@mui/material";
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Button from 'react-bootstrap/Button'
+import Dropdown from 'react-bootstrap/Dropdown'
+import { STUDENT, ADMIN, RESPONDER } from "../App";
 
 
 
 function ViewIncidentsPage(props) {
 
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const backendURL = props.backendURL;
+  const userType = props.userType;
+  const categories = props.categories;
+  const email = props.email;
+  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [incidentSub, setIncidentSub] = useState(null);
+  const [incidentCat, setIncidentCat] = useState(null);
+  const [incidentRes, setIncidentRes] = useState(null);
+  const [incidentList, setIncidentList] = useState([]);
+  
 
   const handleListItemClick = (
     event, index
   ) => {
     setSelectedIndex(index);
   };
-  //sx={{ width: '300', maxWidth: 10000, bgcolor: 'background.paper' }}
+
+  var respEmail = null, stuEmail = null;
+  console.log(userType)
+  if (userType === STUDENT){
+    stuEmail = email;
+    console.log(stuEmail)
+  }
+  else if(userType === RESPONDER)
+    respEmail = email;
+
+  useEffect(() => {
+    fetch(`${backendURL}/IncidentQuery`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      credentials: 'include',
+      body: JSON.stringify({ 
+        cat: incidentCat,
+        sub: incidentSub,
+        resolved: incidentRes,
+        std_info: {
+          id: stuEmail
+        },
+        resp_id: respEmail 
+      })
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res)
+        console.log(stuEmail)
+        setIncidentList(res);
+      });
+  }, [incidentCat, incidentSub, incidentRes]);  
+
+  // const onSubChange = (e) => {
+  //   if (e.target.value === '') 
+  //     setIncidentSub(null);
+  //   else
+  //     setIncidentSub(e.target.value);
+  // }
 
   return (
     <Container maxWidth='xl' >
-      <List component="nav" aria-label="main mailbox folders">
-        <ListItemButton
-          selected={selectedIndex === 0}
-          onClick={(event) => handleListItemClick(event, 0)}
+      
+      <Stack direction={'row'} spacing={4}>
+      <InputLabel id="resolved">Resolved</InputLabel>
+      <Select
+          id="res"
+          label="Resolved"
+          value={incidentRes}
+          onChange={(e) => {setIncidentRes(e.target.value); incidentRes ? console.log('true'):console.log('false')}}
         >
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary="Inbox" />
-        </ListItemButton>
-        <ListItemButton
-          selected={selectedIndex === 1}
-          onClick={(event) => handleListItemClick(event, 1)}
+          <MenuItem value={'true'} >Yes</MenuItem>
+          <MenuItem value={'false'}>No</MenuItem>
+      </Select>
+      <Select
+          label="Category"
+          value={incidentCat}
+          onChange={(e) => setIncidentCat(e.target.value)}
         >
-          <ListItemIcon>
-            <DraftsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Drafts" />
-        </ListItemButton>
-      </List>
-      <Divider />
-      <List component="nav" aria-label="secondary mailbox folder">
-        <ListItemButton
-          selected={selectedIndex === 2}
-          onClick={(event) => handleListItemClick(event, 2)}
-        >
-          <ListItemText primary="Trash" />
-        </ListItemButton>
-        <ListItemButton
-          selected={selectedIndex === 3}
-          onClick={(event) => handleListItemClick(event, 3)}
-        >
-          <ListItemText primary="Spam" />
-        </ListItemButton>
-      </List>
+          {categories.map((category) => (
+            <MenuItem value={category} key={category}>{category}</MenuItem>
+          ))}
+      </Select>
+      <TextField
+          label="Subject"
+          variant="outlined" 
+          value={incidentSub} 
+          onChange={(e) => setIncidentSub(e.target.value)}
+      />
+      </Stack>
+      <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Subject</TableCell>
+            <TableCell align="right">Status</TableCell>
+            <TableCell align="right">Assigned&nbsp;</TableCell>
+            <TableCell align="right">Category&nbsp;</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {incidentList.map((incident) => (
+           <TableRow
+              key={incident.cat}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              {/* <Link to={{pathname: '/view-incidents/incident', state:{incident}}}> */}
+                <TableCell alingn="left" component="th" scope="row">{incident.sub}</TableCell>
+              {/* </Link>  */}
+              <TableCell align="right">{incident.resolved ? 'resolved' : 'not resolved'}</TableCell>
+              <TableCell align="right">{incident.assigned ? 'assigned' : 'not assigned'}</TableCell>
+              <TableCell align="right">{incident.cat}</TableCell>
+            </TableRow>
+            
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   </Container>
   );
   
