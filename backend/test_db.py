@@ -54,3 +54,13 @@ print(incident.cat)
 StdInfo = get_student_info("ES18BTECH11013")
 print(StdInfo)
 
+class StudentInfo(BaseModel):
+    id: Optional[str] = Field(alias='_id')
+    name: Optional[str] = None
+    room_no: Optional[str] = None
+    ph_no: Optional[str] = None
+
+
+Stdinfo = StudentInfo(id = 'es18btech11013@iith.ac.in')
+
+print(Stdinfo)

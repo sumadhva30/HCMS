@@ -54,9 +54,15 @@ function App() {
               email={email}
               toast={toast}
             />} />
-          <Route path="/view-incidents" element={<ViewIncidentsPage/>} />
+          <Route path="/view-incidents" element={
+            <ViewIncidentsPage 
+              backendURL={backendURL} 
+              userType={userType}
+              categories={categories}
+              email = {email}
+            />} />
           <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories}/>} />
-          <Route path ="/test" element={<Test categories={categories}/>}/>
+          {/* <Route path ="/test" element={<Test categories={categories} oncall={oncall}/>}/> */}
           {/*... etc ...*/}
         </Routes>
         <CustomizedSnackbars settings={snackbarProps} setProps={setSnackBarProps} />
