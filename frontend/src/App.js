@@ -61,7 +61,7 @@ function App() {
               categories={categories}
               email = {email}
             />} />
-          <Route path="/view-incident" element={
+          <Route path="/view-incident:/incidentId" element={
             <OnCallSchedule backendURL={backendURL} categories={categories}/>} />
           <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories}/>} />
           {/* <Route path ="/test" element={<Test categories={categories} oncall={oncall}/>}/> */}

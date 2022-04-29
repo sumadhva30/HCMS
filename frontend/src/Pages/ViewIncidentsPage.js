@@ -74,8 +74,8 @@ function ViewIncidentsPage(props) {
   }
    
   let navigate = useNavigate(); 
-  const routeChange = () =>{  
-    navigate('/view-oncall');
+  const routeChange = (incident) =>{  
+    navigate(`/view-oncall\{in}`);
   }
 
   return (
