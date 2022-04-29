@@ -22,7 +22,8 @@ function ViewIncidentsPage(props) {
   const [incidentSub, setIncidentSub] = useState(null);
   const [incidentCat, setIncidentCat] = useState(null);
   const [incidentRes, setIncidentRes] = useState(null);
-  const [incidentList, setIncidentList] = useState([]);
+  const incidentList = props.incidents
+  const setIncidentList = props.setIncidents
   
 
   const handleListItemClick = (
@@ -75,7 +76,7 @@ function ViewIncidentsPage(props) {
    
   let navigate = useNavigate(); 
   const routeChange = (incident) =>{  
-    navigate('/view-oncall');
+    navigate('/view-incident');
   }
 
   return (
@@ -86,22 +87,22 @@ function ViewIncidentsPage(props) {
       <Select
           id="res"
           label="Resolved"
-          value={incidentRes}
-          onChange={(e) => {setIncidentRes(e.target.value); incidentRes ? console.log('true'):console.log('false')}}
+          value={incidentRes ? incidentRes : 'All'}
+          onChange={(e) => {setIncidentRes(e.target.value != 'All' ? e.target.value : null); e.target.value ? console.log('true'):console.log('false')}}
         >
           <MenuItem value={'true'} >Yes</MenuItem>
           <MenuItem value={'false'}>No</MenuItem>
-          <MenuItem value={null}>All</MenuItem>
+          <MenuItem value={'All'}>All</MenuItem>
       </Select>
       <Select
           label="Category"
-          value={incidentCat}
-          onChange={(e) => {console.log(e.target.value); setIncidentCat(e.target.value)}}
+          value={incidentCat ? incidentCat : 'All'}
+          onChange={(e) => {setIncidentCat(e.target.value != 'All' ? e.target.value : null)}}
         >
           { categories.map((category) => (
             <MenuItem value={category} key={category}>{category}</MenuItem>
           ))}
-          <MenuItem value = {null}> All</MenuItem>
+          <MenuItem value = {'All'}> All</MenuItem>
       </Select>
       <TextField
           label="Subject"

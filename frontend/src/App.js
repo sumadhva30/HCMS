@@ -24,6 +24,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [userType, setUserType] = useState(LOGGEDOUT);
   const [categories, setCategories] = useState([]);
+  const [incidentList, setIncidentList] = useState([]);
   const fetchCategories = () => {
     fetch(`${backendURL}/viewCategories`, {credentials: 'include'})
       .then((res) => res.json())
@@ -64,9 +65,11 @@ function App() {
               userType={userType}
               categories={categories}
               email = {email}
+              incidents = {incidentList}
+              setIncidents = {setIncidentList}
             />} />
           <Route path="/view-incident" element={
-            <OnCallSchedule backendURL={backendURL} categories={categories}/>} />
+            <ViewIncident backendURL={backendURL} categories={categories}/>} />
           <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories}/>} />
           <Route path="/update-oncallweekly" element={
             <UpdateOnCallWeekly backendURL={backendURL} 
