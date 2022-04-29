@@ -1,23 +1,26 @@
+from functools import reduce
 from typing import List
 from fastapi import FastAPI
+from flatten_dict import flatten
 from Models import IncidentInfo, OnCallSpecific, OnCallWeekly, ResponderInfo, ResponderSummaryModel
 from dbaccess import database, stripNone
 
 app = FastAPI()
 
 def search_incidents(query: IncidentInfo) -> List[IncidentInfo]:
-    eq_searchable = ['_id', 'cat', 'assigned', 'resolved', 'severity', 'resp_id', 'std_id']
+    eq_searchable = ['_id', 'cat', 'assigned', 'resolved', 'severity', 'resp_id', 'std_info._id']
     # only sub is text searchable
 
     query_doc = {}
-    print(query.dict(by_alias=True).items())
-    for k, v in query.dict(by_alias=True).items():
+    print(flatten(query.dict(by_alias=True), reducer='dot').items())
+    for k, v in flatten(query.dict(by_alias=True), reducer='dot').items():
         if v is not None and k in eq_searchable:
             query_doc[k] = v
         if v is not None and k == 'sub':
             query_doc['$text'] = {'$search':v}
     print(query_doc)
     cursor = database["Incidents"].find(query_doc)
+    print(list(database["Incidents"].find(query_doc)[:100]))
     return list(database["Incidents"].find(query_doc)[:100]) # todo paging
 
 def search_responders(query: ResponderInfo) -> List[ResponderSummaryModel]:

@@ -6,7 +6,7 @@ from fastapi import HTTPException
 from record import *
 from search import *
 from dbaccess import all_admins, get_student_id, get_responder_id
-from notify import notify_user
+from notify import generate_email, notify_user
 
 def assign_incident(incident: IncidentInfo):
     responder = check_specific_oncall_schedule(incident)
@@ -19,7 +19,8 @@ def assign_incident(incident: IncidentInfo):
     insert_incident(incident)
     if responder:
         notif_receivers = [incident.std_info.id, responder]
-        notify_user(notif_receivers, f"New incident created and assigned: {incident.sub}", incident.msgs[0])
+        sub, msg = generate_email("create", incident.sub, incident.msgs[0].msg)
+        notify_user(notif_receivers, sub, msg)
 
     
 def check_weekly_oncall_schedule(incident: IncidentInfo) -> str:
@@ -83,11 +84,13 @@ def update_incident(incident: IncidentInfo) -> None:
     if incident.msgs != None:
         append_incident_msgs(incident)
         notif_receivers = [get_student_id(incident.id), get_responder_id(incident.id)]
-        notify_user(notif_receivers, f"New Incident Message: {incident.sub}", incident.msgs[0])
+        sub, msg = generate_email("message", incident.sub, incident.msgs[0].msg, incident.msgs[0].sender_id)
+        notify_user(notif_receivers, sub, msg)
     elif incident.notes != None:
         append_incident_notes(incident)
         notif_receivers = all_admins() + [get_responder_id(incident.id)]
-        notify_user(notif_receivers, f"New Incident Note: {incident.sub}", incident.notes[0])
+        sub, msg = generate_email("note", incident.sub, incident.notes[0].note, incident.notes[0].sender_id)
+        notify_user(notif_receivers, sub, msg)
     else:
         if incident.cat:
             new_responder = check_specific_oncall_schedule(incident)
@@ -98,7 +101,7 @@ def update_incident(incident: IncidentInfo) -> None:
         notif_receivers = all_admins() + [get_student_id(incident.id)]
         if not incident.feedback:
             notif_receivers.append(get_responder_id(incident.id))
-        notify_user(notif_receivers, f"Incident Update: {incident.sub}", "Please open the HCMS portal to view update")
+        notify_user(notif_receivers, "Incident Update", f"Incident <{incident.sub}> has been updated.\nPlease open the HCMS portal to view update")
 
 
 def update_specific_oncall_schedule(oncall_specific: OnCallSpecific) -> None:

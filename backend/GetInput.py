@@ -1,3 +1,4 @@
+from ast import get_source_segment
 import copy
 from datetime import datetime
 from http import HTTPStatus
@@ -20,7 +21,7 @@ from Models import *
 from search import *
 from record import *
 from update import *
-from dbaccess import get_categories, get_student_info
+from dbaccess import get_categories, get_student_info, get_weekly_schedule, get_specific_schedule
 from auth import *
 
 secret_key = os.environ['SESSION_SECRET']
@@ -36,7 +37,8 @@ def raiseTicket(TktInfo : TicketInfo):
        Return value is nothing but 'Incident Info'
     '''
     StdInfo = get_student_info(TktInfo.id)
-    StdInfObj = StudentInfo(**StdInfo)
+    StdInfObj = StudentInfo(**StdInfo, by_alias = True)
+    print(StdInfObj)
     initial_desc = IncidentMsgs(sender_id=TktInfo.id, msg=TktInfo.desc, timeStamp=datetime.now())
     newIncident = IncidentInfo(sub=TktInfo.sub, cat=TktInfo.cat, std_info=StdInfObj, msgs=[initial_desc])
     assign_incident(newIncident)
@@ -66,6 +68,14 @@ async def putUpdateIncident(updatedIncident : IncidentInfo, request: Request):
 
     update_incident(updatedIncident)
 
+
+@app.get("/viewOnCallWeekly")
+async def viewOnCallWeekly():
+    return json.loads(json_util.dumps(get_weekly_schedule()))
+
+@app.get("/viewOnCallSpecific")
+async def viewOnCallSpecific():
+    return json.loads(json_util.dumps(get_specific_schedule()))
 
 @app.put("/admin/updateOncallWeekly") 
 async def putOncallWeekly(updatedOncallW : OnCallWeekly):

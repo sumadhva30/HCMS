@@ -21,6 +21,14 @@ def get_categories():
     cursor = database["Category"].find()
     return cursor.next()["categories"]
 
+def get_weekly_schedule():
+    cursor = database["weekly_schedule"].find()
+    return cursor
+
+def get_specific_schedule():
+    cursor = database["specific_schedule"].find()
+    return cursor
+
 def stripNone(data):
     if isinstance(data, dict):
         return {k:stripNone(v) for k, v in data.items() if k is not None and v is not None}
