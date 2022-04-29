@@ -22,7 +22,8 @@ function ViewIncidentsPage(props) {
   const [incidentSub, setIncidentSub] = useState(null);
   const [incidentCat, setIncidentCat] = useState(null);
   const [incidentRes, setIncidentRes] = useState(null);
-  const [incidentList, setIncidentList] = useState([]);
+  const incidentList = props.incidents
+  const setIncidentList = props.setIncidents
   
 
   const handleListItemClick = (
@@ -75,7 +76,7 @@ function ViewIncidentsPage(props) {
    
   let navigate = useNavigate(); 
   const routeChange = (incident) =>{  
-    navigate('/view-oncall');
+    navigate('/view-incident');
   }
 
   return (

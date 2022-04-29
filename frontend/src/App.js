@@ -10,6 +10,7 @@ import AdminHome from './Pages/AdminHome';
 import Navbar from './Components/NavBar';
 import CustomizedSnackbars from './Components/CustomSnackBar';
 import ViewIncident from './Pages/ViewIncident';
+import OnCallSchedule from './Pages/ViewOnCallPage'
 
 export const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
 
@@ -19,6 +20,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [userType, setUserType] = useState(LOGGEDOUT);
   const [categories, setCategories] = useState([]);
+  const [incidentList, setIncidentList] = useState([]);
   const fetchCategories = () => {
     fetch(`${backendURL}/viewCategories`, {credentials: 'include'})
       .then((res) => res.json())
@@ -59,9 +61,11 @@ function App() {
               userType={userType}
               categories={categories}
               email = {email}
+              incidents = {incidentList}
+              setIncidents = {setIncidentList}
             />} />
           <Route path="/view-incident" element={
-            <OnCallSchedule backendURL={backendURL} categories={categories}/>} />
+            <ViewIncident backendURL={backendURL} categories={categories}/>} />
           <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories}/>} />
           {/* <Route path ="/test" element={<Test categories={categories} oncall={oncall}/>}/> */}
           {/*... etc ...*/}
