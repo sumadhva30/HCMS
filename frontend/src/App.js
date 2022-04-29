@@ -9,8 +9,7 @@ import ResponderHome from './Pages/ResponderHome';
 import AdminHome from './Pages/AdminHome';
 import Navbar from './Components/NavBar';
 import CustomizedSnackbars from './Components/CustomSnackBar';
-import OnCallSchedule from './Pages/ViewOnCallPage';
-import Test from "./Pages/test";
+import ViewIncident from './Pages/ViewIncident';
 
 export const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
 

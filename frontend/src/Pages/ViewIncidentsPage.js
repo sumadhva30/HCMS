@@ -147,7 +147,5 @@ function ViewIncidentsPage(props) {
     </TableContainer>
   </Container>
   );
-  
-}
-
+};
 export default ViewIncidentsPage;
