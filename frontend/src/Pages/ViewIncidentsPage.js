@@ -5,9 +5,6 @@ import { Container } from "@mui/material";
 import { Link } from "@mui/material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
 import { FormControl } from "@mui/material";
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Button from 'react-bootstrap/Button'
-import Dropdown from 'react-bootstrap/Dropdown'
 import { STUDENT, ADMIN, RESPONDER } from "../App";
 
 
@@ -60,15 +57,18 @@ function ViewIncidentsPage(props) {
         console.log(res)
         console.log(stuEmail)
         setIncidentList(res);
+        console.log("hello")
+        console.log(incidentList)
       });
-  }, [incidentCat, incidentSub, incidentRes]);  
+  },[incidentCat, incidentRes, incidentSub]);  
+  // incidentCat, incidentSub, incidentRes
 
-  // const onSubChange = (e) => {
-  //   if (e.target.value === '') 
-  //     setIncidentSub(null);
-  //   else
-  //     setIncidentSub(e.target.value);
-  // }
+  const onSubChange = (e) => {
+    if (e.target.value === '') 
+      setIncidentSub(null);
+    else
+      setIncidentSub(e.target.value);
+  }
 
   return (
     <Container maxWidth='xl' >
@@ -87,17 +87,18 @@ function ViewIncidentsPage(props) {
       <Select
           label="Category"
           value={incidentCat}
-          onChange={(e) => setIncidentCat(e.target.value)}
+          onChange={(e) => {console.log(e.target.value); setIncidentCat(e.target.value)}}
         >
-          {categories.map((category) => (
+          { categories.map((category) => (
             <MenuItem value={category} key={category}>{category}</MenuItem>
           ))}
+          {/* <MenuItem value = {null} key={null}> None</MenuItem> */}
       </Select>
       <TextField
           label="Subject"
           variant="outlined" 
           value={incidentSub} 
-          onChange={(e) => setIncidentSub(e.target.value)}
+          onChange={(e) => onSubChange(e)}
       />
       </Stack>
       <TableContainer component={Paper}>
@@ -111,13 +112,15 @@ function ViewIncidentsPage(props) {
           </TableRow>
         </TableHead>
         <TableBody>
+          {/* {console.log(incidentList)}
+          {console.log(incidentList.length)} */}
+            
           {incidentList.map((incident) => (
            <TableRow
-              key={incident.cat}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               {/* <Link to={{pathname: '/view-incidents/incident', state:{incident}}}> */}
-                <TableCell alingn="left" component="th" scope="row">{incident.sub}</TableCell>
+                <TableCell align="left" component="th" scope="row">{incident.sub}</TableCell>
               {/* </Link>  */}
               <TableCell align="right">{incident.resolved ? 'resolved' : 'not resolved'}</TableCell>
               <TableCell align="right">{incident.assigned ? 'assigned' : 'not assigned'}</TableCell>
@@ -125,6 +128,7 @@ function ViewIncidentsPage(props) {
             </TableRow>
             
           ))}
+          {console.log(incidentList)}
         </TableBody>
       </Table>
     </TableContainer>
