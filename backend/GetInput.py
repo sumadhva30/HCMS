@@ -77,12 +77,12 @@ async def viewOnCallWeekly():
 async def viewOnCallSpecific():
     return json.loads(json_util.dumps(get_specific_schedule()))
 
-@app.put("/admin/updateOncallWeekly") 
+@app.post("/admin/updateOncallWeekly") 
 async def putOncallWeekly(updatedOncallW : OnCallWeekly):
     update_weekly_oncall_schedule(updatedOncallW)
     #Calls updateOncallWeekly. Update those fields which are not None.
 
-@app.put("/admin/updateOncallSpecific") 
+@app.post("/admin/updateOncallSpecific") 
 async def putOncallSpecific(updatedOncallS : OnCallSpecific):
     update_specific_oncall_schedule(updatedOncallS)
     #Calls updateOncallSpecific. Update those fields which are not None.

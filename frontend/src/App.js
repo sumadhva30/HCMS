@@ -10,9 +10,10 @@ import AdminHome from './Pages/AdminHome';
 import Navbar from './Components/NavBar';
 import CustomizedSnackbars from './Components/CustomSnackBar';
 import OnCallSchedule from './Pages/ViewOnCallPage';
-import UpdateOnCall from './Pages/UpdateOnCallPage';
+import UpdateOnCallSpecific from './Pages/UpdateOnCallSpecificPage';
+import UpdateOnCallWeekly from './Pages/UpdateOnCallWeeklyPage';
 import Test from "./Pages/test";
-import UpdateOnCallPage from './Pages/UpdateOnCallPage';
+import UpdateOnCallPage from './Pages/UpdateOnCallSpecificPage';
 import ViewIncident from './Pages/ViewIncident';
 
 export const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
@@ -67,11 +68,17 @@ function App() {
           <Route path="/view-incident" element={
             <OnCallSchedule backendURL={backendURL} categories={categories}/>} />
           <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories}/>} />
-          <Route path="/update-oncall" element={
-            <UpdateOnCall backendURL={backendURL} 
+          <Route path="/update-oncallweekly" element={
+            <UpdateOnCallWeekly backendURL={backendURL} 
               userType={userType}
               categories={categories}
-              email = {email}
+              toast = {toast}
+            />} />
+          <Route path="/update-oncallspecific" element={
+            <UpdateOnCallSpecific backendURL={backendURL} 
+              userType={userType}
+              categories={categories}
+              toast = {toast}
             />} />
           {/* <Route path ="/test" element={<Test categories={categories} oncall={oncall}/>}/> */}
           {/*... etc ...*/}
