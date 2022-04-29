@@ -9,6 +9,8 @@ import ResponderHome from './Pages/ResponderHome';
 import AdminHome from './Pages/AdminHome';
 import Navbar from './Components/NavBar';
 import CustomizedSnackbars from './Components/CustomSnackBar';
+import OnCallSchedule from './Pages/ViewOnCallPage';
+import Test from "./Pages/test";
 
 export const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
 
@@ -24,6 +26,13 @@ function App() {
       .then((res) => setCategories(res))
   };
   useEffect(fetchCategories, [userType]);
+  const [oncall, setOnCall] = useState([]);
+  const fetchOnCall = () => {
+    fetch(`${backendURL}/viewOnCall`, {credentials: 'include'})
+      .then((res) => res.json())
+      .then((res) => setOnCall(res))
+  };
+  useEffect(fetchOnCall, [userType]);
   const backendURL = "http://localhost:8000";
   // Snackbar
   const [snackbarProps, setSnackBarProps] = useState({open: false, severity: 'success', message: 'Done!'});
@@ -53,6 +62,8 @@ function App() {
               toast={toast}
             />} />
           <Route path="/view-incidents" element={<ViewIncidentsPage/>} />
+          <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories} oncall={oncall}/>} />
+          <Route path ="/test" element={<Test categories={categories} oncall={oncall}/>}/>
           {/*... etc ...*/}
         </Routes>
         <CustomizedSnackbars settings={snackbarProps} setProps={setSnackBarProps} />
