@@ -3,6 +3,7 @@ import {Calendar, momentLocalizer} from 'react-big-calendar';
 import { Button, MenuItem, Select } from "@mui/material";
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 moment.locale('en-GB');
 const localizer = momentLocalizer(moment);
@@ -93,6 +94,12 @@ function OnCallSchedule(props) {
     return;
   };
 
+  let navigate = useNavigate();
+
+  function updateSchedule() {
+    navigate("/update-oncall");
+  }
+
   return (
     <div style={{ height: 700 }}>
       <Select
@@ -110,6 +117,12 @@ function OnCallSchedule(props) {
           onClick={() => categorySchedule(category)}
         >
         Show Schedule
+      </Button>
+      <Button
+          variant="contained"
+          onClick={() => updateSchedule()}
+        >
+        Update Schedule
       </Button>
       <Calendar
         localizer={localizer}
