@@ -3,9 +3,11 @@ import { Select, MenuItem, Stack} from "@mui/material";
 import { InputLabel, TextField} from "@mui/material";
 import { Container } from "@mui/material";
 import { Link } from "@mui/material";
+import { Button } from "@mui/material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
 import { FormControl } from "@mui/material";
 import { STUDENT, ADMIN, RESPONDER } from "../App";
+
 
 
 
@@ -119,9 +121,11 @@ function ViewIncidentsPage(props) {
            <TableRow
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              {/* <Link to={{pathname: '/view-incidents/incident', state:{incident}}}> */}
+              <Link to={{pathname: '/view-incidents/incident', state:{incident}}}>
+                <Button>
                 <TableCell align="left" component="th" scope="row">{incident.sub}</TableCell>
-              {/* </Link>  */}
+                </Button>
+              </Link> 
               <TableCell align="right">{incident.resolved ? 'resolved' : 'not resolved'}</TableCell>
               <TableCell align="right">{incident.assigned ? 'assigned' : 'not assigned'}</TableCell>
               <TableCell align="right">{incident.cat}</TableCell>
