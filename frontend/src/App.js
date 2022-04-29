@@ -14,7 +14,6 @@ import UpdateOnCall from './Pages/UpdateOnCallPage';
 import Test from "./Pages/test";
 import UpdateOnCallPage from './Pages/UpdateOnCallPage';
 import ViewIncident from './Pages/ViewIncident';
-import OnCallSchedule from './Pages/ViewOnCallPage'
 
 export const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
 

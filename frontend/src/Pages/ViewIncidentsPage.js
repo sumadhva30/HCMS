@@ -19,9 +19,9 @@ function ViewIncidentsPage(props) {
   const categories = props.categories;
   const email = props.email;
   const [selectedIndex, setSelectedIndex] = useState(1);
-  const [incidentSub, setIncidentSub] = useState(null);
-  const [incidentCat, setIncidentCat] = useState(null);
-  const [incidentRes, setIncidentRes] = useState(null);
+  const [incidentSub, setIncidentSub] = useState(undefined);
+  const [incidentCat, setIncidentCat] = useState(undefined);
+  const [incidentRes, setIncidentRes] = useState(undefined);
   const incidentList = props.incidents
   const setIncidentList = props.setIncidents
   
@@ -92,7 +92,7 @@ function ViewIncidentsPage(props) {
         >
           <MenuItem value={'true'} >Yes</MenuItem>
           <MenuItem value={'false'}>No</MenuItem>
-          <MenuItem value={null}>All</MenuItem>
+          <MenuItem value={undefined}>All</MenuItem>
       </Select>
       <Select
           label="Category"
@@ -102,7 +102,7 @@ function ViewIncidentsPage(props) {
           { categories.map((category) => (
             <MenuItem value={category} key={category}>{category}</MenuItem>
           ))}
-          <MenuItem value = {null}> All</MenuItem>
+          <MenuItem value = {undefined}> All</MenuItem>
       </Select>
       <TextField
           label="Subject"
