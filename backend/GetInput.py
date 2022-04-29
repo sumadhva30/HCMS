@@ -20,7 +20,7 @@ from Models import *
 from search import *
 from record import *
 from update import *
-from dbaccess import get_categories, get_student_info
+from dbaccess import get_categories, get_student_info, get_weekly_schedule
 from auth import *
 
 secret_key = os.environ['SESSION_SECRET']
@@ -67,6 +67,10 @@ async def putUpdateIncident(updatedIncident : IncidentInfo, request: Request):
 
     update_incident(updatedIncident)
 
+
+@app.get("/viewOnCall")
+async def viewOnCall():
+    return json.loads(json_util.dumps(get_weekly_schedule()))
 
 @app.put("/admin/updateOncallWeekly") 
 async def putOncallWeekly(updatedOncallW : OnCallWeekly):

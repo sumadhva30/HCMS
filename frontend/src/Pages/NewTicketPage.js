@@ -1,4 +1,4 @@
-import { Button, Container, MenuItem, Select, TextField, Stack } from "@mui/material";
+import { Button, Container, MenuItem, Select, TextField, Stack, InputLabel } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -6,10 +6,12 @@ function NewTicketPage(props) {
   const categories = props.categories;
   const backendURL = props.backendURL;
   const email = props.email;
+  const toast = props.toast;
   let navigate = useNavigate();
   const [subject, setSubject] = useState('');
   const [category, setCategory] = useState('');
   const [message, setMessage] = useState('');
+  
 
   const raiseTicket = (e) => {
     fetch(`${backendURL}/student/raiseticket`, {
@@ -24,6 +26,7 @@ function NewTicketPage(props) {
       })
     }).then((res) => {
       if (res.ok) {
+        toast("success", "Ticket raised!");
         navigate("/");
       }
     });
@@ -31,14 +34,16 @@ function NewTicketPage(props) {
   console.log(categories)
   return (
     <Container>
-      <Stack>
+      <Stack spacing={2}>
         <TextField
           label="Subject"
           variant="outlined" 
           value={subject} 
           onChange={(e) => setSubject(e.target.value)}
         />
+        <InputLabel id="Raise-Category-label">Category</InputLabel>
         <Select
+          labelId="Raise-Category-label"
           label="Category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
