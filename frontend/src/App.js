@@ -9,6 +9,7 @@ import ResponderHome from './Pages/ResponderHome';
 import AdminHome from './Pages/AdminHome';
 import Navbar from './Components/NavBar';
 import CustomizedSnackbars from './Components/CustomSnackBar';
+import ViewIncident from './Pages/ViewIncident';
 
 export const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
 
@@ -53,6 +54,7 @@ function App() {
               toast={toast}
             />} />
           <Route path="/view-incidents" element={<ViewIncidentsPage/>} />
+          <Route path="/view-incident" element={<ViewIncident/>} />
           {/*... etc ...*/}
         </Routes>
         <CustomizedSnackbars settings={snackbarProps} setProps={setSnackBarProps} />
