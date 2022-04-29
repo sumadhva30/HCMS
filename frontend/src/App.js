@@ -9,6 +9,10 @@ import ResponderHome from './Pages/ResponderHome';
 import AdminHome from './Pages/AdminHome';
 import Navbar from './Components/NavBar';
 import CustomizedSnackbars from './Components/CustomSnackBar';
+import OnCallSchedule from './Pages/ViewOnCallPage';
+import UpdateOnCall from './Pages/UpdateOnCallPage';
+import Test from "./Pages/test";
+import UpdateOnCallPage from './Pages/UpdateOnCallPage';
 import ViewIncident from './Pages/ViewIncident';
 import OnCallSchedule from './Pages/ViewOnCallPage'
 
@@ -67,6 +71,12 @@ function App() {
           <Route path="/view-incident" element={
             <ViewIncident backendURL={backendURL} categories={categories}/>} />
           <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories}/>} />
+          <Route path="/update-oncall" element={
+            <UpdateOnCall backendURL={backendURL} 
+              userType={userType}
+              categories={categories}
+              email = {email}
+            />} />
           {/* <Route path ="/test" element={<Test categories={categories} oncall={oncall}/>}/> */}
           {/*... etc ...*/}
         </Routes>
