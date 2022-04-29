@@ -48,7 +48,6 @@ function updateSpecificEvents(events, schedule, cat) {
     var ind = events.findIndex(obj => obj.start.getTime() === start.getTime() && obj.cat === cate);
     if(ind !== -1)
       events[ind].title = cate.concat("\n\n\n", schedule[i]["resp_id"]);
-    console.log(events[ind].title);
   }
   return events;
 }
@@ -78,7 +77,6 @@ function OnCallSchedule(props) {
   useEffect(fetchOnCallSpecific, []);
 
   function categorySchedule(category) {
-    console.log("Entered function");
     var events = [];
     if (category === "All") {
       for (var i=0; i < weekly.length; i++) {
@@ -87,18 +85,8 @@ function OnCallSchedule(props) {
       events = updateSpecificEvents(events, specific, "All");
     }
     else {
-      const mapping= {"Civil_Complaints": 0,
-                    "Housekeeping": 1,
-                    "Washing_Machines": 2,
-                    "Food_Facility": 3,
-                    "Water_Dispensers": 4,
-                    "Electrical_Complaints": 5,
-                    "Furniture": 6,
-                    "Green_office": 7,
-                    "Other": 8,
-                    "Pest_Control": 9}
-      var id = mapping[category];
-      events = generateEvents(weekly[id]);
+      var ind = weekly.findIndex(obj => obj.cat === category);
+      events = generateEvents(weekly[ind]);
       events = updateSpecificEvents(events, specific, category);
     }
     setAllEvents(events);
