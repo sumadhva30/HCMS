@@ -26,13 +26,6 @@ function App() {
       .then((res) => setCategories(res))
   };
   useEffect(fetchCategories, [userType]);
-  const [oncall, setOnCall] = useState([]);
-  const fetchOnCall = () => {
-    fetch(`${backendURL}/viewOnCall`, {credentials: 'include'})
-      .then((res) => res.json())
-      .then((res) => setOnCall(res))
-  };
-  useEffect(fetchOnCall, [userType]);
   const backendURL = "http://localhost:8000";
   // Snackbar
   const [snackbarProps, setSnackBarProps] = useState({open: false, severity: 'success', message: 'Done!'});
@@ -68,8 +61,8 @@ function App() {
               categories={categories}
               email = {email}
             />} />
-          <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories} oncall={oncall}/>} />
-          <Route path ="/test" element={<Test categories={categories} oncall={oncall}/>}/>
+          <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories}/>} />
+          {/* <Route path ="/test" element={<Test categories={categories} oncall={oncall}/>}/> */}
           {/*... etc ...*/}
         </Routes>
         <CustomizedSnackbars settings={snackbarProps} setProps={setSnackBarProps} />
