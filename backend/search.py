@@ -8,7 +8,7 @@ from dbaccess import database, stripNone
 app = FastAPI()
 
 def search_incidents(query: IncidentInfo) -> List[IncidentInfo]:
-    eq_searchable = ['_id', 'cat', 'assigned', 'resolved', 'severity', 'resp_id', 'std_info.id']
+    eq_searchable = ['_id', 'cat', 'assigned', 'resolved', 'severity', 'resp_id', 'std_info._id']
     # only sub is text searchable
 
     query_doc = {}
