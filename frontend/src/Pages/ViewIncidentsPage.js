@@ -121,11 +121,13 @@ function ViewIncidentsPage(props) {
            <TableRow
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <Link to="/view-oncall">
-                <Button>
-                <TableCell align="left" component="th" scope="row">{incident.sub}</TableCell>
-                </Button>
-              </Link> 
+              <TableCell align="left" scope="row">
+                <Link to="/view-oncall">
+                  {/* <Button onClick={(e) => true}> */}
+                  {incident.sub}
+                  {/* </Button> */}
+                </Link>
+              </TableCell> 
               <TableCell align="right">{incident.resolved ? 'resolved' : 'not resolved'}</TableCell>
               <TableCell align="right">{incident.assigned ? 'assigned' : 'not assigned'}</TableCell>
               <TableCell align="right">{incident.cat}</TableCell>
