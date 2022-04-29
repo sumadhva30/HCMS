@@ -121,7 +121,7 @@ function ViewIncidentsPage(props) {
            <TableRow
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <Link to={{pathname: '/view-incidents/incident', state:{incident}}}>
+              <Link to="/view-oncall">
                 <Button>
                 <TableCell align="left" component="th" scope="row">{incident.sub}</TableCell>
                 </Button>
