@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import FeedbackForm from "../Components/FeedbackForm";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#B2E7C8',
@@ -37,66 +37,13 @@ const Item = styled(Paper)(({ theme }) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
-  
-  // const incident = [{
-  //   "_id": "134235246364234123",
-  //   "sub": "reg water dispenser",
-  //   "cat": "Water_Dispensers",
-  //   "assigned": true,
-  //   "resolved": true,
-  //   "severity": 0,
-  //   "resp_id": "responder@iith.ac.in",
-  //   "std_info": {
-  //     "id": "es18btech11021",
-  //     "name": "Vamshi",
-  //     "room_no": "D-613",
-  //     "ph_no": "9618928321"
-  //   },
-  //   "notes": [
-  //     {
-  //       "sender_id": "admin@iith.ac.in",
-  //       "note": "Category has been changed",
-  //       "timeStamp": "2022-04-28T19:33:03.313Z"
-  //     },
-  //     {
-  //       "sender_id": "responder@iith.ac.in",
-  //       "note": "Ticket severity has been changed",
-  //       "timeStamp": "2022-04-28T19:33:03.313Z"
-  //     }
-  //   ],
-  //   "msgs": [
-  //     {
-  //       "sender_id": "student@iith.ac.in",
-  //       "msg": "hello",
-  //       "timeStamp": "2022-04-28T19:33:03.313Z"
-  //     },
-  //     {
-  //       "sender_id": "responder@iith.ac.in",
-  //       "msg": "hi",
-  //       "timeStamp": "2022-04-28T19:33:03.313Z"
-  //     },
-  //     {
-  //       "sender_id": "student@iith.ac.in",
-  //       "msg": "is issue resolved",
-  //       "timeStamp": "2022-04-28T19:33:03.313Z"
-  //     },
-  //     {
-  //       "sender_id": "responder@iith.ac.in",
-  //       "msg": "no we are working on it",
-  //       "timeStamp": "2022-04-28T19:33:03.313Z"
-  //     }
-  //   ],
-  //   "feedback": {
-  //     "resolved": true,
-  //     "act_rating": 0,
-  //     "respTime_rating": 0,
-  //     "comments": "string"
-  //   }
-  // }];
+
 
 function ViewIncident(props) {
   console.log("check below")
-  const incidents = props.incidents
+  const incidents = props.incidents;
+  const backendURL = props.backendURL;
+  const toast = props.toast;
   console.log(incidents)
   const location = useLocation()
   const { id } = location.state
@@ -104,14 +51,15 @@ function ViewIncident(props) {
   const incident = incidents.find(x => x._id.$oid === id)
   console.log(incident)
 
-    const userType = ADMIN
-    let navigate = useNavigate();
-    const id_body = incident._id.$oid
-    const [sender_msg, setMessage] = useState(''); 
-    const [sender_note, setNote] = useState('');
-    const sender_email = "responder@iith.ac.in";
-    const timestamp = new Date();
-    const backendURL = "http://localhost:8000"; 
+  const userType = props.userType
+  let navigate = useNavigate();
+  const id_body = incident._id.$oid
+  const [sender_msg, setMessage] = useState(''); 
+  const [showFeedback, setshowFeedback] = useState(false);
+  const [sender_note, setNote] = useState('');
+  const sender_email = props.email;
+  const timestamp = new Date();
+  // const backendURL = "http://localhost:8000"; 
 
     
     const updateIncidentnotes = (e) => {
@@ -121,21 +69,22 @@ function ViewIncident(props) {
           credentials: 'include',
           body: JSON.stringify({
             _id: id_body,
-            notes: {
+            notes: [{
 
                 sender_id: sender_email,
                 note: sender_note,
                 timeStamp: timestamp.toISOString()
-            }
+            }]
     
           })
         }).then((res) => {
           if (res.ok) {
             // toast("success", "Ticket raised!");
-            navigate("/");
+            navigate("/view-incidents");
           }
         });
       };
+      
 
   
     const updateIncidentmsg = (e) => {
@@ -145,24 +94,27 @@ function ViewIncident(props) {
         credentials: 'include',
         body: JSON.stringify({
           _id: id_body,
-          msgs: JSON.stringify({
+          msgs: [{
               sender_id: sender_email,
               msg: sender_msg,
-              timeStamp: timestamp
-          })
+              timeStamp: timestamp.toISOString()
+          }]
   
         })
       }).then((res) => {
         if (res.ok) {
           // toast("success", "Ticket raised!");
-          navigate("/");
+          navigate("/view-incidents");
         }
       });
     };
     return (
         <Container>
+          <br/>
+          <br/>
             <Stack direction="row" spacing={2}>
-                <Item>id: {incident._id.$oid} </Item>
+                {/* <Item>id: {incident._id.$oid} </Item> */}
+                
                 <Item>sub: {incident.sub} </Item>
                 <Item>cat: {incident.cat} </Item>
                 <Item>assigned: {incident.assigned ? "Assigned": "Unassigned" } </Item>
@@ -179,7 +131,7 @@ function ViewIncident(props) {
             <Stack spacing={2}>
                 <Item3>Incident notes:</Item3>
                 {(incident.notes||[]).map((note)=> (
-                    <Item4>{note.timeStamp.substring(11,16)} $ {note.sender_id}: {note.note}</Item4>
+                    <Item4>{note.timeStamp.$date.substring(11,16)} $ {note.sender_id}: {note.note}</Item4>
                 ))}
             </Stack>
             : null}
@@ -224,6 +176,17 @@ function ViewIncident(props) {
             >
                 Add Message
             </Button>
+            <br></br>
+            <br></br>
+            {incident.resolved ?
+            <Button
+                variant="contained"
+                onClick={() => {setshowFeedback(!showFeedback)}}
+            >
+                Feedback
+            </Button> : null}
+            {showFeedback ? <><br></br>
+            <br></br><FeedbackForm incident={incident} backendURL={backendURL} userType={userType} toast={toast}/></>:null}
         </Container>
     );}
   

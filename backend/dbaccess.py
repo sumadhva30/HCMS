@@ -44,9 +44,10 @@ def stripNone(data):
         return {stripNone(item) for item in data if item is not None}
     else:
         return data
+
 def get_student_id(incident_id):
     inc = database["Incidents"].find_one({"_id": incident_id})
-    return inc["std_info"]["id"]
+    return inc["std_info"]["_id"]
 
 def get_responder_id(incident_id):
     inc = database["Incidents"].find_one({"_id": incident_id})

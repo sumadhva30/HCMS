@@ -1,11 +1,13 @@
 import { Container, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { STUDENT } from "../App";
+import { Stack, RadioGroup, FormControlLabel, Radio, Rating, Button } from "@mui/material";
+import { FormLabel } from "@mui/material";
 
 export default function FeedbackForm(props) {
   const incident = props.incident;
   const toast = props.toast;
-  const userType = props.userType;
+  const userType = '0';
   const backendURL = props.backendURL;
   
   const [resolved, setResolved] = useState(true);
@@ -13,18 +15,21 @@ export default function FeedbackForm(props) {
   const [respTime_rating, setRespTimeRating] = useState(3);
   const [comments, setComments] = useState('');
 
+
   if (!incident.resolved && !incident.feedback ||
     incident.resolved && !incident.feedback && userType != STUDENT) {
+      console.log(incident.resolved)
+      console.log(userType)
     return null; // No feedback nothing for never resolved issue.
   }
   const disabled = incident.feedback ? true : false;
   const submitFeedback = (e) => {
     fetch(`${backendURL}/updateincident`, {
       credentials: 'include',
-      method: 'PUT',
+      method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        "_id": incident["_id"],
+        "_id": incident._id.$oid,
         "feedback": {
           resolved: resolved,
           act_rating: act_rating,
@@ -72,6 +77,7 @@ export default function FeedbackForm(props) {
           Submit Feedback
         </Button>}
       </Stack>
+      <br></br><br></br>
     </Container>
   );
 }
