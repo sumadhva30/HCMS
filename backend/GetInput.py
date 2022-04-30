@@ -50,7 +50,7 @@ def raiseTicket(TktInfo : TicketInfo):
 async def putTicketInfo(tkt : TicketInfo):
     raiseTicket(tkt)
 
-@app.put("/updateincident") #Todo --URL changes
+@app.post("/updateincident") #Todo --URL changes
 async def putUpdateIncident(updatedIncident : IncidentInfo, request: Request):
     #Make sure user is admin.
     #Appropriate priveleges
