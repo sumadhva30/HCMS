@@ -4,6 +4,7 @@ import { STUDENT } from "../App";
 import { Stack, RadioGroup, FormControlLabel, Radio, Rating, Button } from "@mui/material";
 import { FormLabel } from "@mui/material";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function FeedbackForm(props) {
   const incident = props.incident;
@@ -17,6 +18,7 @@ export default function FeedbackForm(props) {
   const [comments, setComments] = useState('');
   const [disabled, setDisabled] = useState(true);
   console.log('feed', incident.feedback); 
+  let navigate = useNavigate();
 
   useEffect(() => {
     if (incident.feedback) {
@@ -51,6 +53,7 @@ export default function FeedbackForm(props) {
     }).then((res) => {
       if (res.ok) {
         toast("success", "Feedback Submitted!");
+        navigate("/view-incidents");
       }
     })
   };

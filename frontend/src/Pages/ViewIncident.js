@@ -56,6 +56,7 @@ function ViewIncident(props) {
   const id_body = incident._id.$oid
   const [sender_msg, setMessage] = useState(''); 
   const [sender_note, setNote] = useState('');
+  const [reso, setReso] = useState();
   const sender_email = props.email;
   const timestamp = new Date();
   // const backendURL = "http://localhost:8000"; 
