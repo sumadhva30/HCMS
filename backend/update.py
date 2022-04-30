@@ -98,6 +98,7 @@ def update_incident(incident: IncidentInfo) -> None:
                 new_responder = check_weekly_oncall_schedule(incident)
             incident.resp_id = new_responder
         set_update_incident(incident)
+        print('inci', incident)
         notif_receivers = all_admins() + [get_student_id(incident.id)]
         if not incident.feedback:
             notif_receivers.append(get_responder_id(incident.id))
