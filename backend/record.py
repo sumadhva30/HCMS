@@ -11,6 +11,11 @@ def insert_incident(incident: IncidentInfo):  # Assuming input is in the right f
 
 def set_update_incident(query: IncidentInfo) -> None:
     update_doc = flatten(stripNone(query.dict(by_alias=True)), reducer='dot')
+    if "feedback.resolved" in update_doc:
+        update_doc["feedback"] = {}
+        for k in ['resolved', 'act_rating', 'respTime_rating', 'comments']:
+            if "feedback."+k in update_doc:
+                update_doc["feedback"][k] = update_doc.pop("feedback." + k)
     database["Incidents"].update_one({"_id": query.id}, {"$set": update_doc})
 
 def append_incident_msgs(query: IncidentInfo) -> None:

@@ -55,7 +55,6 @@ function ViewIncident(props) {
   let navigate = useNavigate();
   const id_body = incident._id.$oid
   const [sender_msg, setMessage] = useState(''); 
-  const [showFeedback, setshowFeedback] = useState(false);
   const [sender_note, setNote] = useState('');
   const sender_email = props.email;
   const timestamp = new Date();
@@ -178,15 +177,7 @@ function ViewIncident(props) {
             </Button>
             <br></br>
             <br></br>
-            {incident.resolved ?
-            <Button
-                variant="contained"
-                onClick={() => {setshowFeedback(!showFeedback)}}
-            >
-                Feedback
-            </Button> : null}
-            {showFeedback ? <><br></br>
-            <br></br><FeedbackForm incident={incident} backendURL={backendURL} userType={userType} toast={toast}/></>:null}
+            <FeedbackForm incident={incident} backendURL={backendURL} userType={userType} toast={toast}/>
         </Container>
     );}
   
