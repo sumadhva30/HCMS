@@ -50,7 +50,7 @@ def raiseTicket(TktInfo : TicketInfo):
 async def putTicketInfo(tkt : TicketInfo):
     raiseTicket(tkt)
 
-@app.put("/updateincident") #Todo --URL changes
+@app.post("/updateincident") #Todo --URL changes
 async def putUpdateIncident(updatedIncident : IncidentInfo, request: Request):
     #Make sure user is admin.
     #Appropriate priveleges
@@ -127,6 +127,12 @@ async def getIncident(incidentQuery : IncidentInfo, request: Request):
     
     incidents = search_incidents(incidentQuery)
     return json.loads(json_util.dumps(incidents))
+
+@app.post("/ResponderQuery")
+async def getIncident(responderQuery : ResponderInfo, request: Request):
+
+    responders = search_responders(responderQuery)
+    return json.loads(json_util.dumps(responders))
 
 @app.post("/admin/OnCallWeeklyQuery") 
 async def getOnCallWeekly(weeklySchedQuery: OnCallWeekly):
