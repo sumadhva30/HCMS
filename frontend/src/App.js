@@ -71,7 +71,7 @@ function App() {
               setIncidents = {setIncidentList}
             />} />
           <Route path="/view-incident" element={
-            <ViewIncident backendURL={backendURL} categories={categories}/>} />
+            <ViewIncident incidents ={incidentList}/>} />
           <Route path="/view-responders" element={
             <ViewRespondersPage 
               backendURL={backendURL} 
