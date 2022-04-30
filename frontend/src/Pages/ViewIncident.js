@@ -58,6 +58,12 @@ function ViewIncident(props) {
   const [sender_note, setNote] = useState('');
   const sender_email = props.email;
   const timestamp = new Date();
+  const [reso, setReso] = useState(incident.resolved);
+  useEffect(() => setReso(incident.resolved), [incident.resolved]);
+  useEffect(() => {
+    if (reso != incident.resolved)
+      updateIncidentReso();
+  }, [reso]);
   // const backendURL = "http://localhost:8000"; 
 
     
@@ -84,25 +90,25 @@ function ViewIncident(props) {
         });
       };
 
-      // useEffect( (e) => {
-      //   fetch(`${backendURL}/updateincident`, {
-      //     method: 'POST',
-      //     headers: {'Content-Type': 'application/json'},
-      //     credentials: 'include',
-      //     body: JSON.stringify({
-      //       _id: id_body,
-      //      resolved: reso
+      const updateIncidentReso = () => {
+        fetch(`${backendURL}/updateincident`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'include',
+          body: JSON.stringify({
+            _id: id_body,
+           resolved: reso
     
-      //     })
-      //   }).then((res) => {
-      //     if (res.ok) {
-      //       // toast("success", "Ticket raised!");
-      //       console.log("check below");
-      //       reso ? console.log("true"):console.log("false")
-      //       navigate("/view-incidents");
-      //     }
-      //   });
-      // }, [reso]);
+          })
+        }).then((res) => {
+          if (res.ok) {
+            // toast("success", "Ticket raised!");
+            console.log("check below");
+            reso ? console.log("true"):console.log("false")
+            navigate("/view-incidents");
+          }
+        });
+      };
       
 
   
@@ -148,7 +154,7 @@ function ViewIncident(props) {
             <Stack direction="row" spacing={2}>
                 {/* <Item>id: {incident._id.$oid} </Item> */}
                 
-                {/* <Select
+                <Select
                   id="res"
                   labelId="demo-simple-select-label"
                   label="Resolved"
@@ -157,7 +163,7 @@ function ViewIncident(props) {
                 >
                 <MenuItem value={true} >Yes</MenuItem>
                 <MenuItem value={false}>No</MenuItem>
-              </Select> */}
+              </Select>
                 {/* <Item>std_info: {std_info.id} </Item> */}
             </Stack>
             <br/>

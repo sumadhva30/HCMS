@@ -46,6 +46,7 @@ def stripNone(data):
         return data
 
 def get_student_id(incident_id):
+    print('iid', incident_id)
     inc = database["Incidents"].find_one({"_id": incident_id})
     return inc["std_info"]["_id"]
 
