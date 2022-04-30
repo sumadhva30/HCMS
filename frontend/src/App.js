@@ -68,7 +68,7 @@ function App() {
               setIncidents = {setIncidentList}
             />} />
           <Route path="/view-incident" element={
-            <ViewIncident backendURL={backendURL} categories={categories}/>} />
+            <ViewIncident incidents ={incidentList}/>} />
           <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories}/>} />
           <Route path="/update-oncall" element={
             <UpdateOnCall backendURL={backendURL} 

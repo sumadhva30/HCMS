@@ -3,7 +3,8 @@ import { Select, MenuItem, Stack} from "@mui/material";
 import { InputLabel, TextField} from "@mui/material";
 import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Link } from "@mui/material";
+// import { Link } from "@mui/material";
+import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
 import { FormControl } from "@mui/material";
@@ -130,7 +131,7 @@ function ViewIncidentsPage(props) {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
              <TableCell align="left" scope="row">
-              <Link to="/view-oncall">
+              <Link to= "/view-incident" state={{id: incident._id.$oid}}>
                 <Button onClick={routeChange}>
                   {incident.sub}
                 </Button>
