@@ -3,7 +3,8 @@ import { Select, MenuItem, Stack} from "@mui/material";
 import { InputLabel, TextField} from "@mui/material";
 import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Link } from "@mui/material";
+// import { Link } from "@mui/material";
+import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
 import { FormControl } from "@mui/material";
@@ -19,7 +20,6 @@ function ViewRespondersPage(props) {
   const categories = props.categories;
   const email = props.email;
   const [selectedIndex, setSelectedIndex] = useState(1);
-  const [responderID, setResponderID] = useState(null);
   const [responderName, setResponderName] = useState(null);
   const [responderCat, setResponderCat] = useState(null);
   const responderList = props.responders
@@ -32,63 +32,42 @@ function ViewRespondersPage(props) {
     setSelectedIndex(index);
   };
 
-  var respEmail = null, stuEmail = null;
-  console.log(userType)
-  respEmail = email;
-
   useEffect(() => {
     fetch(`${backendURL}/ResponderQuery`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       credentials: 'include',
-      body: JSON.stringify({ 
-        _id: respEmail,
-        cat: responderCat, 
+      body: JSON.stringify({
+        cat: responderCat
       })
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res)
+        console.log("res");
+        console.log(res);
         setResponderList(res);
-        console.log("hello")
-        console.log(responderList)
+        console.log("Responder List");
+        console.log(responderList);
       });
-  },[responderCat, responderID, responderName]);  
+  },[responderCat, responderName]);  
   // incidentCat, incidentSub, incidentRes
 
-  const onSubChange = (e) => {
-    if (e.target.value === '') 
-      setResponderID(null);
-    else
-      setResponderID(e.target.value);
-  }
-   
-  let navigate = useNavigate(); 
-  const routeChange = (incident) =>{  
-    navigate('/view-responder');
+  let navigate = useNavigate();
+
+  function addResponder() {
+    navigate("/add-responder");
   }
 
   return (
     <Container maxWidth='xl' >
-      
-      <Stack direction={'row'} spacing={4}>
-      <Select
-          label="Category"
-          value={responderCat ? responderCat : 'All'}
-          onChange={(e) => {setResponderCat(e.target.value != 'All' ? e.target.value : null)}}
+
+      <Button
+          variant="contained"
+          onClick={() => addResponder()}
         >
-          { categories.map((category) => (
-            <MenuItem value={category} key={category}>{category}</MenuItem>
-          ))}
-          <MenuItem value = {'All'}> All</MenuItem>
-      </Select>
-      <TextField
-          label="Name"
-          variant="outlined" 
-          value={responderName} 
-          onChange={(e) => onSubChange(e)}
-      />
-      </Stack>
+        Add Responder
+      </Button>
+      
       <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -106,13 +85,7 @@ function ViewRespondersPage(props) {
            <TableRow
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-             <TableCell align="left" scope="row">
-              <Link to="/view-oncall">
-                <Button onClick={routeChange}>
-                  {responder._id}
-                </Button>
-              </Link> 
-              </TableCell>
+             <TableCell align="left" scope="row">{responder._id}</TableCell>
               <TableCell align="right">{responder.name}</TableCell>
               <TableCell align="right">{responder.category}</TableCell>
             </TableRow>

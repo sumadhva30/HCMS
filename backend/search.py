@@ -26,7 +26,7 @@ def search_incidents(query: IncidentInfo) -> List[IncidentInfo]:
 def search_responders(query: ResponderInfo) -> List[ResponderSummaryModel]:
     # all fields eq searchable
     query_doc = {k: v for k, v in query.dict(by_alias=True).items() if v is not None}
-    responders = list(database["Responders"].find(query_doc)[:100]) # todo paging
+    responders = list(database["Responder"].find(query_doc)[:100]) # todo paging
     responders_dict = {r['_id']: ResponderSummaryModel(r) for r in responders}
 
     agg_incidents = database["Incidents"].aggregate([{
