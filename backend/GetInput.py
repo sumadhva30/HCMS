@@ -103,17 +103,17 @@ async def delResponderInfo(deleteResp: ResponderInfo):
 async def viewCategories():
     return json.loads(json_util.dumps(get_categories()))
 
-@app.put("/admin/updateCategoryInfo") 
-async def updateCategoryInfo(oldCatName : str, newCatName : str):
-    update_category(oldCatName, newCatName)
+@app.post("/admin/updateCategoryInfo") 
+async def updateCategoryInfo(CatUpdate: UpdateCategoryModel):
+    update_category(CatUpdate.old_name, CatUpdate.new_name)
 
 @app.post("/admin/insertCategoryInfo") 
-async def insertCategoryInfo(newCat : str):
-    insert_category(newCat)
+async def insertCategoryInfo(newCat: InsertCategoryModel):
+    insert_category(newCat.cat_name)
 
-@app.delete("/admin/delCategoryInfo") 
-async def delCategoryInfo(delCat : str):
-    delete_category(delCat)
+@app.post("/admin/delCategoryInfo") 
+async def delCategoryInfo(delCat: InsertCategoryModel):
+    delete_category(delCat.cat_name)
 
 @app.post("/IncidentQuery")   #Cmon to all users
 async def getIncident(incidentQuery : IncidentInfo, request: Request):
