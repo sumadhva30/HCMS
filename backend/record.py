@@ -65,5 +65,6 @@ def record_weekly_on_call_schedule(schedule: OnCallWeekly):
 def record_specific_on_call_schedule(schedule: OnCallSpecific):
     if schedule.cat is None:
         return
+    schedule.slot.Date = str(schedule.slot.Date)
     database["specific_schedule"].update_one({"slot": schedule.slot.dict(), "cat": schedule.cat}, 
     {"$set": {"resp_id": schedule.resp_id}}, upsert=True)

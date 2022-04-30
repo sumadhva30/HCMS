@@ -96,8 +96,12 @@ function OnCallSchedule(props) {
 
   let navigate = useNavigate();
 
-  function updateSchedule() {
-    navigate("/update-oncall");
+  function updateWeeklySchedule() {
+    navigate("/update-oncallweekly");
+  }
+
+  function updateSpecificSchedule() {
+    navigate("/update-oncallspecific");
   }
 
   return (
@@ -120,9 +124,15 @@ function OnCallSchedule(props) {
       </Button>
       <Button
           variant="contained"
-          onClick={() => updateSchedule()}
+          onClick={() => updateWeeklySchedule()}
         >
-        Update Schedule
+        Update Weekly Schedule
+      </Button>
+      <Button
+          variant="contained"
+          onClick={() => updateSpecificSchedule()}
+        >
+        Update Specific Schedule
       </Button>
       <Calendar
         localizer={localizer}
