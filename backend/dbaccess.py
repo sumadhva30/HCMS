@@ -17,6 +17,10 @@ def all_admins():
     cursor = database["Admins"].find()
     return [admin["email"] for admin in cursor]
 
+def all_responders():
+    print(list(database["Responder"].find()))
+    return list(database["Responder"].find())
+
 def get_categories():
     cursor = database["Category"].find()
     return cursor.next()["categories"]

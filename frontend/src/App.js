@@ -13,8 +13,9 @@ import OnCallSchedule from './Pages/ViewOnCallPage';
 import UpdateOnCallSpecific from './Pages/UpdateOnCallSpecificPage';
 import UpdateOnCallWeekly from './Pages/UpdateOnCallWeeklyPage';
 import Test from "./Pages/test";
-import UpdateOnCallPage from './Pages/UpdateOnCallSpecificPage';
 import ViewIncident from './Pages/ViewIncident';
+import ViewRespondersPage from './Pages/ViewRespondersPage';
+import AddResponder from './Pages/AddResponder';
 
 export const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
 
@@ -25,6 +26,7 @@ function App() {
   const [userType, setUserType] = useState(LOGGEDOUT);
   const [categories, setCategories] = useState([]);
   const [incidentList, setIncidentList] = useState([]);
+  const [responderList, setResponderList] = useState([]);
   const fetchCategories = () => {
     fetch(`${backendURL}/viewCategories`, {credentials: 'include'})
       .then((res) => res.json())
@@ -74,6 +76,16 @@ function App() {
               backendURL={backendURL} 
               email={email}
               toast={toast}/>} />
+          <Route path="/view-responders" element={
+            <ViewRespondersPage 
+              backendURL={backendURL} 
+              userType={userType}
+              categories={categories}
+              email = {email}
+              responders = {responderList}
+              setResponders = {setResponderList}
+            />} />
+          <Route path="/add-responder" element={<AddResponder backendURL={backendURL} categories={categories} toast={toast}/>} />
           <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories}/>} />
           <Route path="/update-oncallweekly" element={
             <UpdateOnCallWeekly backendURL={backendURL} 

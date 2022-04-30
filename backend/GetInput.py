@@ -21,7 +21,7 @@ from Models import *
 from search import *
 from record import *
 from update import *
-from dbaccess import get_categories, get_student_info, get_weekly_schedule, get_specific_schedule
+from dbaccess import get_categories, get_student_info, get_weekly_schedule, get_specific_schedule, all_responders
 from auth import *
 
 secret_key = os.environ['SESSION_SECRET']
@@ -127,6 +127,15 @@ async def getIncident(incidentQuery : IncidentInfo, request: Request):
     
     incidents = search_incidents(incidentQuery)
     return json.loads(json_util.dumps(incidents))
+
+@app.post("/ResponderQuery")
+async def getResponder(responderQuery : ResponderInfo, request: Request):
+
+    # responders = search_responders(responderQuery)
+    responders = all_responders()
+    print("In Responder Query")
+    print(responders)
+    return json.loads(json_util.dumps(responders))
 
 @app.post("/admin/OnCallWeeklyQuery") 
 async def getOnCallWeekly(weeklySchedQuery: OnCallWeekly):
