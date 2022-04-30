@@ -91,13 +91,13 @@ async def putOncallSpecific(updatedOncallS : OnCallSpecific):
 async def insertResponderInfo(newResp : ResponderInfo):
     insert_responder(newResp)
 
-@app.put("/admin/updateResponderInfo") 
+@app.post("/admin/updateResponderInfo") 
 async def updateResponderInfo(updateResp : ResponderInfo):
     update_responder(updateResp)
 
-@app.delete("/admin/delResponderInfo") 
-async def delResponderInfo(respId: str):
-    delete_responder(respId)
+@app.post("/admin/delResponderInfo") 
+async def delResponderInfo(deleteResp: ResponderInfo):
+    delete_responder(deleteResp)
 
 @app.get("/viewCategories")
 async def viewCategories():

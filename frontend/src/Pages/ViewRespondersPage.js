@@ -58,6 +58,10 @@ function ViewRespondersPage(props) {
     navigate("/add-responder");
   }
 
+  const routeChange = (responder) =>{  
+    navigate('/view-responder');
+  }
+
   return (
     <Container maxWidth='xl' >
 
@@ -85,7 +89,13 @@ function ViewRespondersPage(props) {
            <TableRow
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-             <TableCell align="left" scope="row">{responder._id}</TableCell>
+              <TableCell align="left" scope="row">
+              <Link to= "/view-responder" state={{id: responder._id}}>
+                <Button onClick={routeChange}>
+                  {responder._id}
+                </Button>
+              </Link> 
+              </TableCell>
               <TableCell align="right">{responder.name}</TableCell>
               <TableCell align="right">{responder.category}</TableCell>
             </TableRow>
