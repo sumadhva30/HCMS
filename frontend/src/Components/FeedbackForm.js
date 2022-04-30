@@ -3,18 +3,30 @@ import { useState } from "react";
 import { STUDENT } from "../App";
 import { Stack, RadioGroup, FormControlLabel, Radio, Rating, Button } from "@mui/material";
 import { FormLabel } from "@mui/material";
+import { useEffect } from "react";
 
 export default function FeedbackForm(props) {
   const incident = props.incident;
   const toast = props.toast;
-  const userType = '0';
+  const userType = props.userType;
   const backendURL = props.backendURL;
   
   const [resolved, setResolved] = useState(true);
   const [act_rating, setActRating] = useState(3);
   const [respTime_rating, setRespTimeRating] = useState(3);
   const [comments, setComments] = useState('');
+  const [disabled, setDisabled] = useState(true);
+  console.log('feed', incident.feedback); 
 
+  useEffect(() => {
+    if (incident.feedback) {
+      setResolved(incident.feedback.resolved);
+      setActRating(incident.feedback.act_rating);
+      setRespTimeRating(incident.feedback.respTime_rating);
+      setComments(incident.feedback.comments);
+    }
+      setDisabled(incident.feedback ? true : false);
+  }, [incident.feedback]);
 
   if (!incident.resolved && !incident.feedback ||
     incident.resolved && !incident.feedback && userType != STUDENT) {
@@ -22,7 +34,6 @@ export default function FeedbackForm(props) {
       console.log(userType)
     return null; // No feedback nothing for never resolved issue.
   }
-  const disabled = incident.feedback ? true : false;
   const submitFeedback = (e) => {
     fetch(`${backendURL}/updateincident`, {
       credentials: 'include',
@@ -56,8 +67,8 @@ export default function FeedbackForm(props) {
           name="radio-buttons-group"
           disabled={disabled}
         >
-          <FormControlLabel value={true} control={<Radio />} label="Yes" />
-          <FormControlLabel value={false} control={<Radio />} label="No" />
+          <FormControlLabel value={true} control={<Radio disabled={disabled}/>} label="Yes" />
+          <FormControlLabel value={false} control={<Radio disabled={disabled}/>} label="No" />
         </RadioGroup>
         <Typography component="legend">How would you rate the actions taken / response provided?</Typography>
         <Rating disabled={disabled} value={act_rating} onChange={(e, nv) => setActRating(nv)} />

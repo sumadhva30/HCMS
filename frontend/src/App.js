@@ -16,6 +16,10 @@ import Test from "./Pages/test";
 import ViewIncident from './Pages/ViewIncident';
 import ViewRespondersPage from './Pages/ViewRespondersPage';
 import AddResponder from './Pages/AddResponder';
+import ViewResponder from './Pages/ViewResponder';
+import ViewCategoriesPage from './Pages/ViewCategoriesPage';
+import AddCategory from './Pages/AddCategory';
+import ViewCategory from './Pages/ViewCategory';
 
 export const STUDENT = '0', RESPONDER = '1', ADMIN = '2', LOGGEDOUT = '3';
 
@@ -86,6 +90,11 @@ function App() {
               setResponders = {setResponderList}
             />} />
           <Route path="/add-responder" element={<AddResponder backendURL={backendURL} categories={categories} toast={toast}/>} />
+          <Route path="/view-responder" element={
+          <ViewResponder responders={responderList} categories={categories} toast={toast}/>} />
+          <Route path="/view-categories" element={<ViewCategoriesPage backendURL={backendURL} categories={categories}/>}/>
+          <Route path="/add-category" element={<AddCategory backendURL={backendURL} toast={toast}/>}/>
+          <Route path="/view-category" element={<ViewCategory backendURL={backendURL} toast={toast}/>}/>
           <Route path="/view-oncall" element={<OnCallSchedule backendURL={backendURL} categories={categories}/>} />
           <Route path="/update-oncallweekly" element={
             <UpdateOnCallWeekly backendURL={backendURL} 

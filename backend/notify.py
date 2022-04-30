@@ -16,6 +16,7 @@ def notify_user(rec, sub: str, body: str):
         bod = body
 
         msg = f'Subject: {subject}\n\n{bod}'
+        print(rec)
         smtp.sendmail(EMAIL_ADDRESS,rec,msg)
 
 def generate_email(notif_type, subject, message, sender=None):

@@ -13,17 +13,11 @@ import { STUDENT, ADMIN, RESPONDER } from "../App";
 
 
 
-function ViewRespondersPage(props) {
+function ViewCategoriesPage(props) {
 
   const backendURL = props.backendURL;
-  const userType = props.userType;
   const categories = props.categories;
-  const email = props.email;
   const [selectedIndex, setSelectedIndex] = useState(1);
-  const [responderName, setResponderName] = useState(null);
-  const [responderCat, setResponderCat] = useState(null);
-  const responderList = props.responders
-  const setResponderList = props.setResponders
   
 
   const handleListItemClick = (
@@ -32,34 +26,14 @@ function ViewRespondersPage(props) {
     setSelectedIndex(index);
   };
 
-  useEffect(() => {
-    fetch(`${backendURL}/ResponderQuery`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      credentials: 'include',
-      body: JSON.stringify({
-        cat: responderCat
-      })
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("res");
-        console.log(res);
-        setResponderList(res);
-        console.log("Responder List");
-        console.log(responderList);
-      });
-  },[responderCat, responderName]);  
-  // incidentCat, incidentSub, incidentRes
-
   let navigate = useNavigate();
 
-  function addResponder() {
-    navigate("/add-responder");
+  function addCategory() {
+    navigate("/add-category");
   }
 
-  const routeChange = (responder) =>{  
-    navigate('/view-responder');
+  const routeChange = (category) =>{  
+    navigate('/view-category');
   }
 
   return (
@@ -67,45 +41,40 @@ function ViewRespondersPage(props) {
 
       <Button
           variant="contained"
-          onClick={() => addResponder()}
+          onClick={() => addCategory()}
         >
-        Add Responder
+        Add Category
       </Button>
       
       <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell align="right">Name&nbsp;</TableCell>
-            <TableCell align="right">Category&nbsp;</TableCell>
+            <TableCell>Category Name</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {/* {console.log(incidentList)}
           {console.log(incidentList.length)} */}
             
-          {responderList.map((responder) => (
+          {categories.map((category) => (
            <TableRow
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell align="left" scope="row">
-              <Link to= "/view-responder" state={{id: responder._id}}>
+              <Link to= "/view-category" state={{category: category}}>
                 <Button onClick={routeChange}>
-                  {responder._id}
+                  {category}
                 </Button>
               </Link> 
               </TableCell>
-              <TableCell align="right">{responder.name}</TableCell>
-              <TableCell align="right">{responder.category}</TableCell>
             </TableRow>
             
           ))}
-          {console.log(responderList)}
         </TableBody>
       </Table>
     </TableContainer>
   </Container>
   );
 };
-export default ViewRespondersPage;
+export default ViewCategoriesPage;
