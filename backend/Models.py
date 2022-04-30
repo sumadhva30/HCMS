@@ -95,3 +95,11 @@ class ResponderSummaryModel(ResponderInfo):
 class UserTypeResponseModel(BaseModel):
     email: str
     user_type: str
+
+class InsertCategoryModel(BaseModel):
+    cat_name: str
+
+class UpdateCategoryModel(BaseModel):
+    old_name: str
+    new_name: str
+    

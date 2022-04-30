@@ -34,12 +34,12 @@ def insert_responder(responder: ResponderInfo):
 def update_responder(responder: ResponderInfo):
     if responder.name:
         database["Responder"].update_one({"_id": responder.id}, {"$set": {"name": responder.name}})
-    if responder.category:
+    if not (len(responder.category) == 1 and responder.category[0] == ""):
         database["Responder"].update_one({"_id": responder.id}, {"$set": {"category": responder.category}})
 
-def delete_responder(responder_id: str):
-    database["Responder"].delete_one({"_id": responder_id})
-    database["Incidents"].update_many({"resp_id": responder_id, "resolved": False}, {"$set": {"resp_id": None, "assigned": False}})
+def delete_responder(responder: ResponderInfo):
+    database["Responder"].delete_one({"_id": responder.id})
+    database["Incidents"].update_many({"resp_id": responder.id, "resolved": False}, {"$set": {"resp_id": None, "assigned": False}})
 
 
 ## Category Functions
