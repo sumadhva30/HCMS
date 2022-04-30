@@ -1,4 +1,4 @@
-import { Button, TextField, Container, Stack } from "@mui/material";
+import { Button, TextField, Container, Stack, Select, MenuItem } from "@mui/material";
 import { STUDENT,RESPONDER, ADMIN, LOGGEDOUT } from "../App";
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FeedbackForm from "../Components/FeedbackForm";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -55,7 +55,6 @@ function ViewIncident(props) {
   let navigate = useNavigate();
   const id_body = incident._id.$oid
   const [sender_msg, setMessage] = useState(''); 
-  const [showFeedback, setshowFeedback] = useState(false);
   const [sender_note, setNote] = useState('');
   const sender_email = props.email;
   const timestamp = new Date();
@@ -84,6 +83,26 @@ function ViewIncident(props) {
           }
         });
       };
+
+      // useEffect( (e) => {
+      //   fetch(`${backendURL}/updateincident`, {
+      //     method: 'POST',
+      //     headers: {'Content-Type': 'application/json'},
+      //     credentials: 'include',
+      //     body: JSON.stringify({
+      //       _id: id_body,
+      //      resolved: reso
+    
+      //     })
+      //   }).then((res) => {
+      //     if (res.ok) {
+      //       // toast("success", "Ticket raised!");
+      //       console.log("check below");
+      //       reso ? console.log("true"):console.log("false")
+      //       navigate("/view-incidents");
+      //     }
+      //   });
+      // }, [reso]);
       
 
   
@@ -108,6 +127,7 @@ function ViewIncident(props) {
         }
       });
     };
+    // useEffect()
     return (
         <Container>
           <br/>
@@ -115,16 +135,31 @@ function ViewIncident(props) {
             <Stack direction="row" spacing={2}>
                 {/* <Item>id: {incident._id.$oid} </Item> */}
                 
-                <Item>sub: {incident.sub} </Item>
-                <Item>cat: {incident.cat} </Item>
-                <Item>assigned: {incident.assigned ? "Assigned": "Unassigned" } </Item>
-                <Item>resolved: {incident.resolved ? "Resolved": "Unresolved" } </Item>
-                <Item>severity: {incident.severity} </Item>
-                <Item>resp_id: {incident.resp_id} </Item>
+                <Item>Sub: {incident.sub} </Item>
+                <Item>Category: {incident.cat} </Item>
+                <Item>Assigned: {incident.assigned ? "Assigned": "Unassigned" } </Item>
+                <Item>Status: {incident.resolved ? "Resolved": "Unresolved" } </Item>
+                <Item>Severity: {incident.severity} </Item>
+                <Item>Resp_id: {incident.resp_id} </Item>
                 {/* <Item>std_info: {std_info.id} </Item> */}
             </Stack>
             <br/>
             <br/>
+            <Stack direction="row" spacing={2}>
+                {/* <Item>id: {incident._id.$oid} </Item> */}
+                
+                {/* <Select
+                  id="res"
+                  labelId="demo-simple-select-label"
+                  label="Resolved"
+                  value={reso}
+                  onChange={(e) => {setReso(e.target.value)}}
+                >
+                <MenuItem value={true} >Yes</MenuItem>
+                <MenuItem value={false}>No</MenuItem>
+              </Select> */}
+                {/* <Item>std_info: {std_info.id} </Item> */}
+            </Stack>
             <br/>
             <br/>
             {userType != STUDENT ? 
@@ -178,15 +213,7 @@ function ViewIncident(props) {
             </Button>
             <br></br>
             <br></br>
-            {incident.resolved ?
-            <Button
-                variant="contained"
-                onClick={() => {setshowFeedback(!showFeedback)}}
-            >
-                Feedback
-            </Button> : null}
-            {showFeedback ? <><br></br>
-            <br></br><FeedbackForm incident={incident} backendURL={backendURL} userType={userType} toast={toast}/></>:null}
+            <FeedbackForm incident={incident} backendURL={backendURL} userType={userType} toast={toast}/>
         </Container>
     );}
   
