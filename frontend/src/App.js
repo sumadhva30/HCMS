@@ -99,6 +99,7 @@ function App() {
               categories={categories}
               toast = {toast}
             />} />
+          <Route path="/admin-home" element={<AdminHome/>}/>
           {/* <Route path ="/test" element={<Test categories={categories} oncall={oncall}/>}/> */}
           {/*... etc ...*/}
         </Routes>
